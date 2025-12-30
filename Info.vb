@@ -927,7 +927,7 @@ Public Class Info
         Cmbox.Text = ArchivoElegido
         Ejecuta(ArchivoElegido)
     End Sub
-    Sub Ejecuta(ByVal ArchivoElegido)
+    Sub Ejecuta(ByVal ArchivoElegido As String)
         Cantar = 1
         CA(1) = ArchivoElegido
         abre()

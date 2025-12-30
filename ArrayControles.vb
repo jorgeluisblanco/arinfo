@@ -1,14 +1,14 @@
-'------------------------------------------------------------------------------
+Ôªø'------------------------------------------------------------------------------
 ' ArrayControles                                                    (09/Abr/07)
 '
-' Clase-colecciÛn para simular un array de controles de Visual Basic 6.0
+' Clase-colecci√≥n para simular un array de controles de Visual Basic 6.0
 ' Se utilizan clases generic para contener los controles.
 '
-' Esta clase est· basada en ControlArray (09/Ago/2002),
+' Esta clase est√° basada en ControlArray (09/Ago/2002),
 ' publicada en mi sitio el 14/Nov/2002:
 ' http://www.elguille.info/NET/dotnet/arrayControles.htm
 '
-' ©Guillermo 'guille' Som, 2002, 2007
+' ¬©Guillermo 'guille' Som, 2002, 2007
 '------------------------------------------------------------------------------
 Option Strict On
 
@@ -26,7 +26,7 @@ Namespace Utilidades
     ''' que debe derivarse de Control.
     ''' </summary>
     ''' <typeparam name="T">
-    ''' El tipo de control que contendr· la colecciÛn.
+    ''' El tipo de control que contendr√° la colecci√≥n.
     ''' </typeparam>
     ''' <remarks>
     ''' Se deriva de List(Of T)
@@ -44,26 +44,26 @@ Namespace Utilidades
         ''' <param name="elNombre">
         ''' El nombre base de los controles del array,
         ''' esos controles deben tener el nombre: elNombre_numero.
-        ''' No se admite una cadena vacÌa.
+        ''' No se admite una cadena vac√≠a.
         ''' </param>
         ''' <remarks></remarks>
         Public Sub New(ByVal elNombre As String)
             MyBase.New()
             If String.IsNullOrEmpty(elNombre) Then
                 Throw New ArgumentException( _
-                            "El nombre del control no puede ser una cadena vacÌa")
+                            "El nombre del control no puede ser una cadena vac√≠a")
             End If
             ' Asignarlo a la propiedad
-            ' para que se convierta en min˙sculas
-            ' o cualquier otra comprobaciÛn.
+            ' para que se convierta en min√∫sculas
+            ' o cualquier otra comprobaci√≥n.
             Me.Nombre = elNombre
         End Sub
 
         ''' <summary>
-        ''' Constructor para inicializar directamente la colecciÛn de controles
+        ''' Constructor para inicializar directamente la colecci√≥n de controles
         ''' </summary>
         ''' <param name="ctrls">
-        ''' ColecciÛn de controles en la que est·n los que debemos usar.
+        ''' Colecci√≥n de controles en la que est√°n los que debemos usar.
         ''' </param>
         ''' <param name="elNombre">
         ''' El nombre base de los controles a tener en cuenta.
@@ -80,7 +80,7 @@ Namespace Utilidades
         End Sub
 
         ''' <summary>
-        ''' Constructor para inicializar directamente la colecciÛn de controles
+        ''' Constructor para inicializar directamente la colecci√≥n de controles
         ''' </summary>
         ''' <param name="contenedor">
         ''' El contenedor que tiene los controles a comprobar.
@@ -96,15 +96,15 @@ Namespace Utilidades
         End Sub
 
         ''' <summary>
-        ''' Asignar los controles de la colecciÛn indicada.
+        ''' Asignar los controles de la colecci√≥n indicada.
         ''' </summary>
         ''' <param name="ctrls">
-        ''' ColecciÛn de controles en la que est·n los que debemos usar.
-        ''' El nombre usado ser· el indicado al crear la colecciÛn.
+        ''' Colecci√≥n de controles en la que est√°n los que debemos usar.
+        ''' El nombre usado ser√° el indicado al crear la colecci√≥n.
         ''' </param>
         ''' <remarks>
-        ''' La colecciÛn de controles puede ser Me.Controls
-        ''' ya que aquÌ solo se tendr·n en cuenta los controles
+        ''' La colecci√≥n de controles puede ser Me.Controls
+        ''' ya que aqu√≠ solo se tendr√°n en cuenta los controles
         ''' que tengan el nombre usado en esta clase,
         ''' y se recorren todas las colecciones de controles que haya.
         ''' </remarks>
@@ -118,8 +118,8 @@ Namespace Utilidades
         ''' Asignar los controles del contenedor indicado.
         ''' </summary>
         ''' <param name="contenedor">
-        ''' El contenedor de los controles en los que se buscar·n
-        ''' los del tipo indicado en esta colecciÛn.
+        ''' El contenedor de los controles en los que se buscar√°n
+        ''' los del tipo indicado en esta colecci√≥n.
         ''' </param>
         ''' <remarks></remarks>
         Public Sub AsignarControles(ByVal contenedor As ContainerControl)
@@ -130,7 +130,7 @@ Namespace Utilidades
 
         Private Sub asignarLosControles(ByVal ctrls As Control.ControlCollection)
             ' El tipo debe ser Control, para tener en cuenta todos los controles
-            ' que haya en la colecciÛn indicada.
+            ' que haya en la colecci√≥n indicada.
             For Each ctr As Control In ctrls
                 ' Hacer una llamada recursiva por si este control "contiene" otros
                 If ctr.Controls.Count > 0 Then
@@ -177,16 +177,16 @@ Namespace Utilidades
         ''' <summary>
         ''' Sobrecarga de la propiedad predeterminada
         ''' para permitir el acceso con un valor de tipo Object.
-        ''' Aunque el tipo debe ser del que contiene la colecciÛn,
-        ''' si no es asÌ, se devuelve un valor nulo.
+        ''' Aunque el tipo debe ser del que contiene la colecci√≥n,
+        ''' si no es as√≠, se devuelve un valor nulo.
         ''' </summary>
         ''' <param name="obj">
         ''' El control a comprobar
         ''' </param>
         ''' <value></value>
         ''' <returns>
-        ''' Si el par·metro es del tipo adecuado, 
-        ''' se devuelve con el tipo de la colecciÛn,
+        ''' Si el par√°metro es del tipo adecuado, 
+        ''' se devuelve con el tipo de la colecci√≥n,
         ''' si no lo es, se devuelve un valor nulo.
         ''' </returns>
         ''' <remarks></remarks>
@@ -199,8 +199,8 @@ Namespace Utilidades
                 ' Quita estos comnetarios y comenta el Return anterio
                 ' si quieres que se compruebe exactamente el control.
 
-                '' Buscar ese control en la colecciÛn,
-                '' para asegurarnos de que en realidad est·.
+                '' Buscar ese control en la colecci√≥n,
+                '' para asegurarnos de que en realidad est√°.
 
                 'If ctrl Is Nothing Then
                 '    Return Nothing
@@ -223,31 +223,31 @@ Namespace Utilidades
         'End Property
 
         ''' <summary>
-        ''' Devuelve el Ìndice del control de esta colecciÛn
-        ''' que tenga el mismo Ìndice que el del par·metro.
-        ''' Ese par·metro puede ser cualquier control,
-        ''' y lo que se tendr· en cuenta ser· el nombre usado,
+        ''' Devuelve el √≠ndice del control de esta colecci√≥n
+        ''' que tenga el mismo √≠ndice que el del par√°metro.
+        ''' Ese par√°metro puede ser cualquier control,
+        ''' y lo que se tendr√° en cuenta ser√° el nombre usado,
         ''' el cual debe tener la forma nombre_indice,
-        ''' de forma que se devolver· el control que tenga ese mismo Ìndice.
+        ''' de forma que se devolver√° el control que tenga ese mismo √≠ndice.
         ''' </summary>
         ''' <param name="obj">
-        ''' El control a comprobar si existe un Ìndice como el indicado.
+        ''' El control a comprobar si existe un √≠ndice como el indicado.
         ''' Al ser de tipo Object no es necesario que sea del mismo tipo
-        ''' que los que contiene esta colecciÛn.
+        ''' que los que contiene esta colecci√≥n.
         ''' </param>
         ''' <returns>
-        ''' El Ìndice correspondiente.
-        ''' Aunque no se comprueba si existe en la colecciÛn.
-        ''' En el caso de que el par·metro no tenga el formato adecuado,
+        ''' El √≠ndice correspondiente.
+        ''' Aunque no se comprueba si existe en la colecci√≥n.
+        ''' En el caso de que el par√°metro no tenga el formato adecuado,
         ''' se devuelve -1.
         ''' </returns>
         ''' <remarks>
         ''' Esta sobrecarga se puede usar para buscar el control correspondiente
-        ''' con el del Ìndice de otro control, por ejemplo:
+        ''' con el del √≠ndice de otro control, por ejemplo:
         ''' i = m_TextBox1.Index(sender)
-        ''' Por supuesto, el par·metro debe ser de tipo Control.
-        ''' Este mÈtodo podrÌa estar compartido, pero debido a que su uso
-        ''' serÌa ArrayControles(Of TIPO).Index(sender)
+        ''' Por supuesto, el par√°metro debe ser de tipo Control.
+        ''' Este m√©todo podr√≠a estar compartido, pero debido a que su uso
+        ''' ser√≠a ArrayControles(Of TIPO).Index(sender)
         ''' he preferido dejarlo como de instancia.
         ''' </remarks>
         Public Function Index(ByVal obj As Object) As Integer
@@ -281,13 +281,13 @@ Namespace Utilidades
         'End Function
 
         ''' <summary>
-        ''' Devuelve el Ìndice del control con el nombre indicado.
+        ''' Devuelve el √≠ndice del control con el nombre indicado.
         ''' </summary>
         ''' <param name="name">
-        ''' Nombre del control a buscar en la colecciÛn.
+        ''' Nombre del control a buscar en la colecci√≥n.
         ''' </param>
         ''' <returns>
-        ''' Un valor de tipo entero con el Ìndice del control.
+        ''' Un valor de tipo entero con el √≠ndice del control.
         ''' </returns>
         ''' <remarks></remarks>
         Public Function Index(ByVal name As String) As Integer
@@ -304,13 +304,13 @@ Namespace Utilidades
         End Function
 
         ''' <summary>
-        ''' Devuelve el Ìndice del control indicado.
+        ''' Devuelve el √≠ndice del control indicado.
         ''' </summary>
         ''' <param name="ctrl">
-        ''' El control del que queremos averiguar el Ìndice.
+        ''' El control del que queremos averiguar el √≠ndice.
         ''' </param>
         ''' <returns>
-        ''' Un valor de tipo entero con el Ìndice del control.
+        ''' Un valor de tipo entero con el √≠ndice del control.
         ''' </returns>
         ''' <remarks></remarks>
         Public Function Index(ByVal ctrl As T) As Integer
@@ -332,11 +332,11 @@ Namespace Utilidades
         End Function
         '
         ''' <summary>
-        ''' La propiedad Nombre, externamente ser· de solo lectura.
+        ''' La propiedad Nombre, externamente ser√° de solo lectura.
         ''' </summary>
-        ''' <value>El nombre de la colecciÛn de controles</value>
+        ''' <value>El nombre de la colecci√≥n de controles</value>
         ''' <returns>
-        ''' El nombre de la colecciÛn de controles.
+        ''' El nombre de la colecci√≥n de controles.
         ''' </returns>
         ''' <remarks>
         ''' </remarks>
@@ -350,8 +350,8 @@ Namespace Utilidades
         End Property
         '
         ''' <summary>
-        ''' Reorganizar el contenido de la colecciÛn,
-        ''' ordenando por el Ìndice indicado despuÈs del guiÛn bajo
+        ''' Reorganizar el contenido de la colecci√≥n,
+        ''' ordenando por el √≠ndice indicado despu√©s del gui√≥n bajo
         ''' </summary>
         ''' <remarks></remarks>
         Public Sub Reorganizar()
@@ -374,3 +374,4 @@ Namespace Utilidades
     End Class
 
 End Namespace
+

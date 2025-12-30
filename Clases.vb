@@ -1,3 +1,5 @@
+﻿Option Strict On
+Option Explicit On
 Class ESTRU
     Public KPOS As Short
     Public KLEN As Short
@@ -262,7 +264,7 @@ Public Class QB
     End Function
 
     Public Shared Function XFND0(ByRef valor As Double, ByRef largo As Short, ByRef decimales As Short) As String
-        Return Math.Round(valor, decimales).ToString("N" & decimales.ToString).Replace(",", ".").PadLeft(largo, "0")
+        Return Math.Round(valor, decimales).ToString("N" & decimales.ToString).Replace(",", ".").PadLeft(largo, "0"c)
     End Function
     Shared Function XFnfecha(ByVal Fecha As String) As String
         Dim Temp As String
@@ -322,5 +324,6 @@ Public Class QB
         Return Mid(cadena, 1, largo)
     End Function
 End Class
+
 
 

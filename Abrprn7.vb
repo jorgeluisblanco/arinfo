@@ -1,4 +1,4 @@
-Option Strict Off
+﻿Option Strict On
 Option Explicit On
 Imports System
 Imports System.Text
@@ -119,7 +119,7 @@ ABREBTR:
                 Arbtr(Ar).Archivo = FileName
                 Arbtr(Ar).DDF = DDF & "FILE.DDF"
                 Arbtr(Ar).Cripto = "{"
-                Status = Arbtr(Ar).AbreArchivos
+                Status = CShort(Arbtr(Ar).AbreArchivos)
             End If
         Next
     End Sub
@@ -132,8 +132,8 @@ ABREBTR:
 
     Public Function XFND0(ByRef valor As Double, ByRef largo As Short, ByRef decimales As Short) As String
         Dim temp As String = Math.Round(valor, decimales).ToString("N" & decimales.ToString).Replace(".", "")
-        Return temp.Replace(",", ".").PadLeft(largo, "0")
-        'Return Math.Round(valor, decimales).ToString("N" & decimales.ToString).Replace(",", ".").PadLeft(largo, "0")
+        Return temp.Replace(",", ".").PadLeft(largo, "0"c)
+        'Return Math.Round(valor, decimales).ToString("N" & decimales.ToString).Replace(",", ".").PadLeft(largo, "0"c)
     End Function
     Public Function XFNFECHA(ByRef valor As String) As String
         'implementar
@@ -195,8 +195,8 @@ ABREBTR:
         Art.Vbtrv1.IndexNumber = 0
         Dim Status As Integer = Art.Bseek(">=", Articulo)
         If Status = 0 And Mid(Art.Keyval, 1, Len(Articulo)) = Articulo Then
-            Descripcion = Art.Vbtrv1.FieldValue(-1 + 2)
-            Precio = Art.Vbtrv1.FieldValue(-1 + 4)
+            Descripcion = CStr(Art.Vbtrv1.FieldValue(-1 + 2))
+            Precio = CStr(Art.Vbtrv1.FieldValue(-1 + 4))
         Else
             Descripcion = ""
             Precio = ""
@@ -294,3 +294,5 @@ ABREBTR:
     End Class
 
 End Module
+
+

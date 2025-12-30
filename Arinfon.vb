@@ -1,4 +1,4 @@
-Imports CrystalDecisions.CrystalReports.Engine
+ï»¿Imports CrystalDecisions.CrystalReports.Engine
 Imports CrystalDecisions.ReportSource
 Imports CrystalDecisions.Shared
 Imports System.Text
@@ -57,7 +57,7 @@ Module Arinfon
     Dim Exiti As Integer
     Dim BA As String
 
-    Dim TabCentrado
+    Dim TabCentrado As Boolean
     Dim FechaEmision As String
     Dim TituloInforme As String
     Dim BB$
@@ -124,12 +124,12 @@ Module Arinfon
     Dim NN(60) As String
     Dim CamposdeBusqueda(60) As String
     Dim Instrucciones(75) As String
-    Dim AnchoDeCampo(60)
-    Dim AnchoDeColumna(60)
-    Dim TipoDeCampo(60)
-    Dim DeciDeCampo(60)
-    Dim SubtDeCampo(60)
-    Dim InstruccionesArchivadas(10)
+    Dim AnchoDeCampo(60) As Integer
+    Dim AnchoDeColumna(60) As Integer
+    Dim TipoDeCampo(60) As Integer
+    Dim DeciDeCampo(60) As Integer
+    Dim SubtDeCampo(60) As Integer
+    Dim InstruccionesArchivadas(10) As String
     Dim FLG%(9, 3)
     Dim CL$(9)
     Dim G%(60)
@@ -1987,15 +1987,15 @@ Public Class EncodedStringWriter
     Private _Encoding As Encoding
 
     '      ''<summary>Default constructor for the EncodedStringWriter class.</summary>
-    '   ''<param name=“sb“>The formatted result to output.</param>
-    '        ''<param name=“Encoding“>A member of the System.Text.Encoding class.</param>
+    '   ''<param name=â€œsbâ€œ>The formatted result to output.</param>
+    '        ''<param name=â€œEncodingâ€œ>A member of the System.Text.Encoding class.</param>
     Public Sub New(ByVal sb As StringBuilder, ByVal Encoding As Encoding)
         MyBase.New(sb)
         _Encoding = Encoding
     End Sub
 
     '        ''<summary>Gets the Encoding in which the output is written.</summary>
-    '  ''<param name=“Encoding“>The Encoding in which the output is written.</param>
+    '  ''<param name=â€œEncodingâ€œ>The Encoding in which the output is written.</param>
     '       ''<remarks>This property is necessary for some XML scenarios where a header must be written containing the encoding used by the StringWriter. This allows the XML code to consume an arbitrary StringWriter and generate the correct XML header.</remarks>
     Public Overrides ReadOnly Property Encoding() As Encoding
         Get
