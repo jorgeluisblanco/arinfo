@@ -1,4 +1,4 @@
-Option Strict Off
+﻿Option Strict Off
 Option Explicit On
 Public Class Btr
     Inherits System.Windows.Forms.Form
@@ -434,3 +434,4 @@ OtraBitri1:
         Me.NameKeyval = NameKeyval
     End Function
 End Class
+
