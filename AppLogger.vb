@@ -24,14 +24,14 @@ Public Module AppLogger
     ''' <summary>
     ''' Registra un mensaje de debug.
     ''' </summary>
-    Public Sub Debug(message As String)
+    Public Sub LogDebug(message As String)
         Logger.Debug(message)
     End Sub
 
     ''' <summary>
     ''' Registra un mensaje de debug con formato.
     ''' </summary>
-    Public Sub Debug(format As String, ParamArray args As Object())
+    Public Sub LogDebug(format As String, ParamArray args As Object())
         Logger.Debug(format, args)
     End Sub
 

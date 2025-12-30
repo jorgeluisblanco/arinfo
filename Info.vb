@@ -84,7 +84,7 @@ Public Class Info
     Public Sub ParseSchema(ByVal schema As String)
         Dim myStreamReader As StreamReader = Nothing
         Try
-            AppLogger.Debug("Leyendo schema: " & schema)
+            AppLogger.LogDebug("Leyendo schema: " & schema)
             myStreamReader = New StreamReader(schema)
             Console.WriteLine("Reading Schema file ...")
             myXmlDataDocument.DataSet.ReadXmlSchema(myStreamReader)
@@ -579,7 +579,7 @@ Public Class Info
             Dim rowcount As Integer = dt.Rows.Count
             AppLogger.LogOperation("UPDATE", "Actualizando " & rowcount.ToString() & " registros")
             For i As Integer = 0 To dt.Rows.Count - 1
-                AppLogger.Debug("Bookmark: " & dt.Rows(i)("Bookmark").ToString())
+                AppLogger.LogDebug("Bookmark: " & dt.Rows(i)("Bookmark").ToString())
                 x.Vbtrv1.BtrievePosition = dt.Rows(i)("Bookmark")
                 x.Vbtrv1.Edit()
                 For j As Integer = 1 To dt.Columns.Count - 1
