@@ -1,0 +1,24 @@
+# Archivos generados por Visual Studio
+.vs/
+bin/
+obj/
+publish/
+
+# Archivos de usuario
+*.user
+*.suo
+*.cache
+
+# Archivos de NuGet (si se usa después)
+packages/
+
+# Logs
+logs/
+*.log
+
+# Archivos temporales
+*.tmp
+*~
+
+# Archivos de backup
+Backup/
