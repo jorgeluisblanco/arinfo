@@ -268,73 +268,87 @@ OTROAR:
             Asignavariables()
             Exit Sub
         End If
-50490:
-        KF = 0
-        F% = 1
-        'limpiar ventana
-        'imprime centrado el titulo (generador de informes)
-        Debug.Print(Tiq$(F%))
-        FE% = F%
-        'muestra los informes guardados
-        'ponerlos en una lista
-        Dim IndiceInstruccion As Integer
-        For IndiceInstruccion = 1 To NroInstruccionesArchivadas
-            Debug.Print(Str(IndiceInstruccion) + "- " + InstruccionesArchivadas(IndiceInstruccion))
-        Next
-50511:
-        'que hacemos, que, dale de nuevo
-        M$ = "Ingresa el informe ...    [F1]- Campos  [F10]- Abandona  [F6]Cambia clave(" + Str$(Keynum%) + ")"
-        'salida
-        B$ = Info.TextBox2.Text ' "IMPRIMI ORDEN CODIGO RAZON SOCIAL 'CONS' INVERS"
-        If ARRI% = 20 Then
-            'cierra archivo  #Pxt
-            'FileClose(Pxt)
-            Exit Sub
-        End If
-        'clave
-        If ARRI% = 16 Then
-            Keynum = Keynum + 1
-            Status = Arbtr(Ar).CallBtrv(12, Keyval, Keynum)
-            If (Status <> 0) And (Status <> 6) Then
-                Debug.Print("STAT: " & Status)
-                Stop
-            End If
-            If Status = 6 Then
-                Keynum = 0
-            End If
-            GoTo 50511
-        End If
-        Y# = Val(B$)
-        If Y# > 0 And Y# <= NroInstruccionesArchivadas Then
-            B$ = InstruccionesArchivadas(Y#)
-            Debug.Print(B$)
-        End If
-        If Y# < 0 Then
-            'borra instruccion
-            For IndiceInstruccion = (Y# * -1) To NroInstruccionesArchivadas
-                InstruccionesArchivadas(IndiceInstruccion) = InstruccionesArchivadas(IndiceInstruccion + 1)
+        Dim repetirArinfo As Boolean = True
+        Do While repetirArinfo
+            repetirArinfo = False ' Por defecto no repetimos a menos que se indique explícitamente
+
+            ' --- 50490: Mostrar informes guardados ---
+            KF = 0
+            F% = 1
+            Debug.Print(Tiq$(F%))
+            FE% = F%
+            Dim IndiceInstruccion As Integer
+            For IndiceInstruccion = 1 To NroInstruccionesArchivadas
+                Debug.Print(Str(IndiceInstruccion) + "- " + InstruccionesArchivadas(IndiceInstruccion))
             Next
-            NroInstruccionesArchivadas = NroInstruccionesArchivadas - 1
-            GoTo 50490
-        End If
-        If qb4.Left(B$, 4) = "GRAB" Then
-            C$ = "-=< Grabando >=-"  'graba en secuencial
-            'envia mensaje
-            Debug.Print(C$)
-            GrabaArchivoListados()
-            GoTo 50490
-        End If
-        C$ = " sale ..!"
-        Debug.Print(C$)
-        VUELTA% = 0
-        Call Deco1()
-        If VUELTA% Then
-            GoTo 50490
-        End If
-        ConfirmaImpresora()
-        If VUELTA% Then
-            GoTo 50490
-        End If
+
+            Dim leerComando As Boolean = True
+            Do While leerComando
+                leerComando = False ' Por defecto salimos de la lectura del comando
+
+                ' --- 50511: Ingreso de informe ---
+                M$ = "Ingresa el informe ...    [F1]- Campos  [F10]- Abandona  [F6]Cambia clave(" + Str$(Keynum%) + ")"
+                B$ = Info.TextBox2.Text ' "IMPRIMI ORDEN CODIGO RAZON SOCIAL 'CONS' INVERS"
+                
+                If ARRI% = 20 Then
+                    Exit Sub
+                End If
+
+                ' Cambio de clave
+                If ARRI% = 16 Then
+                    Keynum = Keynum + 1
+                    Status = Arbtr(Ar).CallBtrv(12, Keyval, Keynum)
+                    If (Status <> 0) And (Status <> 6) Then
+                        Debug.Print("STAT: " & Status)
+                        Stop
+                    End If
+                    If Status = 6 Then
+                        Keynum = 0
+                    End If
+                    leerComando = True ' Equivale a GoTo 50511
+                    Continue Do
+                End If
+
+                Y# = Val(B$)
+                If Y# > 0 And Y# <= NroInstruccionesArchivadas Then
+                    B$ = InstruccionesArchivadas(Y#)
+                    Debug.Print(B$)
+                End If
+
+                If Y# < 0 Then
+                    ' borra instruccion
+                    For IndiceInstruccion = (CInt(Y#) * -1) To NroInstruccionesArchivadas
+                        InstruccionesArchivadas(IndiceInstruccion) = InstruccionesArchivadas(IndiceInstruccion + 1)
+                    Next
+                    NroInstruccionesArchivadas = NroInstruccionesArchivadas - 1
+                    repetirArinfo = True ' Equivale a GoTo 50490
+                    Exit Do
+                End If
+
+                If qb4.Left(B$, 4) = "GRAB" Then
+                    C$ = "-=< Grabando >=-"  'graba en secuencial
+                    Debug.Print(C$)
+                    GrabaArchivoListados()
+                    repetirArinfo = True ' Equivale a GoTo 50490
+                    Exit Do
+                End If
+
+                C$ = " sale ..!"
+                Debug.Print(C$)
+                VUELTA% = 0
+                Call Deco1()
+                If VUELTA% Then
+                    repetirArinfo = True ' Equivale a GoTo 50490
+                    Exit Do
+                End If
+
+                ConfirmaImpresora()
+                If VUELTA% Then
+                    repetirArinfo = True ' Equivale a GoTo 50490
+                    Exit Do
+                End If
+            Loop
+        Loop
         Call Deco2()
         'otro info ? o fin de info
         If GG% Then
@@ -661,16 +675,7 @@ OTROAR:
         'MsgBox("Otro Informe")
         Info.TabControl1.SelectedIndex = 2
 
-        'Call SiNo()
-        RR% = 0
-        If RR% Then
-            GoTo 50490 'otro informe
-        Else
-            'fin de informe
-            'FileClose(Pxt)
-            'Info.TextBox1.Text = System.IO.File.ReadAllText(Device)
-            Exit Sub
-        End If
+        'Simplificado: Exit Sub directo ya que RR% siempre es 0\n        Exit Sub
     End Sub
     Function VerificaSiEntra(ByVal Cr As ReportDocument, ByVal MedidaFont As Single) As Integer
         Dim MyText As TextObject
@@ -1081,50 +1086,30 @@ OTROAR:
             If FlagSubTotal And IndH = 1 Then
                 If AAA$ = Arbtr(Ar).Campo(M%) Then
                     A$ = Separador + Space(AnchoDeCampo(M%))
-                    'If FlgExcell Then
-                    '    If M% = 1 Then
-                    '        AL$ = SeparadorComillas + Space(AnchoDeCampo(M%)) + SeparadorComillas
-                    '    Else
-                    '        AL$ = SeparadorComa + SeparadorComillas + Space(AnchoDeCampo(M%)) + SeparadorComillas
-                    '    End If
-                    'End If
                     FS% = 1
-                    GoTo 50720
                 Else
                     AAA$ = Arbtr(Ar).Campo(M%)
+                    If M% Then ' indice del campo en el archivo
+                        DD$ = Arbtr(Ar).Campo(M%) ' campo del archivo
+                        If TipoDeCampo(M%) = 3 Then
+                            DD$ = XFNINV(DD$) ' si fecha lo invierte
+                        End If
+                        A$ = Separador + DD$
+                    Else
+                        A$ = ""
+                    End If
                 End If
-            End If
-            If M% Then ' indice del campo en el archivo
-                DD$ = Arbtr(Ar).Campo(M%) ' campo del archivo
-                If TipoDeCampo(M%) = 3 Then
-                    DD$ = XFNINV(DD$) ' si fecha lo invierte
-                End If
-                A$ = Separador + DD$
-                'If FlgExcell Then
-                '    If M% = 1 Then
-                '        If TipoDeCampo(M%) > 0 Then
-                '            If Val(DD$) = 0 Then
-                '                DD$ = "0"
-                '            End If
-                '            AL$ = SeparadorNumerico + DD$ + SeparadorNumerico
-                '        Else
-                '            AL$ = SeparadorComillas + DD$ + SeparadorComillas
-                '        End If
-                '    Else
-                '        If TipoDeCampo(M%) > 0 Then
-                '            If Val(DD$) = 0 Then
-                '                DD$ = "0"
-                '            End If
-                '            AL$ = SeparadorComa + SeparadorNumerico + DD$ + SeparadorNumerico
-                '        Else
-                '            AL$ = SeparadorComa + SeparadorComillas + DD$ + SeparadorComillas
-                '        End If
-                '    End If
-                'End If
             Else
-                A$ = ""
+                If M% Then ' indice del campo en el archivo
+                    DD$ = Arbtr(Ar).Campo(M%) ' campo del archivo
+                    If TipoDeCampo(M%) = 3 Then
+                        DD$ = XFNINV(DD$) ' si fecha lo invierte
+                    End If
+                    A$ = Separador + DD$
+                Else
+                    A$ = ""
+                End If
             End If
-50720:
             IndiceCampo = IndH
             PrintDeCampo() ' imprime el campo
 50721:
@@ -1401,39 +1386,53 @@ OTROAR:
             End If
             If Status% = 9 Then
                 Exiti = 1
-                GoTo 50675
-            End If
-            IndH = -1
-50660:
-            If IndH >= HH Then
-                GoTo 50670
-            Else
-                If IndH > -1 And FLG%(IndH + 1, 3) Then
-                    IndH = IndH + 1
-                    GoTo 50660
-                End If
+                Continue While
             End If
 
-50665:
-            IndH = IndH + 1
-            DD$ = Arbtr(Ar).Campo(FLG%(IndH, 1))
-            If TipoDeCampo(FLG%(IndH, 1)) = 3 Then
-                DD$ = XFNINV(DD$) ' fecha
-            End If
-            If Math.Sign(InStr(DD$, CL$(IndH))) Xor FLG%(IndH, 2) Or FLG%(IndH, 0) = 2 + Math.Sign(Val(DD$) - Z#(IndH)) Then ' aca compara
-                GoTo 50660
-            ElseIf FLG%(IndH + 1, 3) Then
-                GoTo 50665
+            Dim pasaFiltro As Boolean = False
+            If HH < 0 Then
+                pasaFiltro = True
             Else
-                GoTo 50675
+                Dim indH_eval As Integer = 0
+                Do While indH_eval <= HH
+                    DD$ = Arbtr(Ar).Campo(FLG%(indH_eval, 1))
+                    If TipoDeCampo(FLG%(indH_eval, 1)) = 3 Then
+                        DD$ = XFNINV(DD$) ' fecha
+                    End If
+
+                    Dim cumpleCondicion As Boolean = (Math.Sign(InStr(DD$, CL$(indH_eval))) Xor FLG%(indH_eval, 2) Or FLG%(indH_eval, 0) = 2 + Math.Sign(Val(DD$) - Z#(indH_eval)))
+
+                    If cumpleCondicion Then
+                        ' Salta filtros OR consecutivos si ya se cumplió el bloque
+                        While indH_eval < HH AndAlso FLG%(indH_eval + 1, 3) <> 0
+                            indH_eval += 1
+                        End While
+                        ' Si llegamos al final de los filtros, este registro es válido
+                        If indH_eval >= HH Then
+                            pasaFiltro = True
+                            Exit Do
+                        End If
+                    Else
+                        ' Si no cumple, solo tiene otra oportunidad si la siguiente condición es un 'O' (flag 3)
+                        If indH_eval < HH AndAlso FLG%(indH_eval + 1, 3) <> 0 Then
+                            ' sigue el bucle para evaluar el siguiente OR
+                        Else
+                            ' no cumple y no hay OR alternativo: descarta registro
+                            pasaFiltro = False
+                            Exit Do
+                        End If
+                    End If
+                    indH_eval += 1
+                Loop
             End If
-50670:
-            If OrdenxCampo Then
-                LeeOrdena()
-            Else
-                LeeImprime()
+
+            If pasaFiltro Then
+                If OrdenxCampo Then
+                    LeeOrdena()
+                Else
+                    LeeImprime()
+                End If
             End If
-50675:
         End While
         OrdenA = 0
         OrdenZ = IndiceOrden - 1
@@ -1447,14 +1446,11 @@ OTROAR:
             Else
                 DireccionOrden = 1
             End If
-        Else
-            GoTo 50685
+            For Indice = OrdenA To OrdenZ Step DireccionOrden
+                Arbtr(Ar).Vbtrv1.BtrievePosition = Mid(ArraySort(Indice).ToString(), LargoCampoOrden + 1)
+                LeeImprime()
+            Next
         End If
-        For Indice = OrdenA To OrdenZ Step DireccionOrden
-            Arbtr(Ar).Vbtrv1.BtrievePosition = Mid(ArraySort(Indice), LargoCampoOrden + 1)
-            LeeImprime()
-        Next
-50685:
         GG% = N%
         ClaveBusqueda = CL$(0)
         If G%(4) Then
@@ -1602,7 +1598,7 @@ OTROAR:
             ISS = InStr(BuscoSeparador, Mid(B$, IndiceDeFrase, 1)) ' "+-*/%^=' :;.,()HVBSCZK"
             'MsgBox(Mid(B$, IndiceDeFrase, 1))
             If ISS < 1 Then
-                GoTo 50565 ' avanza el puntero
+                Continue For ' avanza el puntero
             Else
                 UU% = 4 ' precision en la busqueda
             End If
@@ -1624,7 +1620,7 @@ OTROAR:
                 IndH = IndH + 1
                 SCLAC% = 1
                 SCMPC% = 0
-                GoTo 50565 ' avanza el puntero
+                Continue For ' avanza el puntero
             End If
             If InStr(" NO | NI | SIN ", Mid(B$, IndiceDeFrase, UU%)) Then
                 FLG%(IndH, 2) = 1 ' flag de exclusion
@@ -1672,18 +1668,18 @@ OTROAR:
                 If NroCampoInstruccion = CantidadCampos + 1 Then
                     NroCampoInstruccion = CantidadCampos + 2 ' analiza palabras claves menos TOTAL
                 End If
-50555:
-                AAA$ = LTrim(Mid(B$, IndiceDeFrase + 1, Uc%))
-                'AA$ = mid(B$, IndiceDeFrase + 1, U%)
-                If InStr(CamposdeBusqueda(NroCampoInstruccion), AAA$) And Len(AAA$) = Uc% Then
-                    'AA$ = LTRIM$(mid(B$, IndiceDeFrase + 1, U%))
-                    'IF qb4.LEFT(CamposdeBusqueda(NroCampoInstruccion), LEN(AA$)) = AA$ AND LEN(AA$) = U% THEN
-                    Uc% = Uc% + 1
-                    GoTo 50555
-                ElseIf Uc% > UU% Then
-                    UU% = Uc%
-                    Kx = NroCampoInstruccion
-                End If
+                Do
+                    AAA$ = LTrim(Mid(B$, IndiceDeFrase + 1, Uc%))
+                    If InStr(CamposdeBusqueda(NroCampoInstruccion), AAA$) And Len(AAA$) = Uc% Then
+                        Uc% = Uc% + 1
+                    Else
+                        If Uc% > UU% Then
+                            UU% = Uc%
+                            Kx = NroCampoInstruccion
+                        End If
+                        Exit Do
+                    End If
+                Loop
             Next
             If Kx Then
                 IndiceDeFrase = IndiceDeFrase + Uc% - 2
@@ -1700,7 +1696,7 @@ OTROAR:
                 End If
             End If
             'WRITE G%(4): INPUT AAA
-50565:
+            ' 50565: - Etiqueta eliminada al usar Continue For
         Next
 
         HH = IndH - 1
@@ -1804,13 +1800,12 @@ OTROAR:
     End Sub
     Sub Sigo()
         'fin de pantalla, o interupcion
-50440:
-        Debug.Print("Sigo")
-        Call SiNo()
-        If RR% = 2 Then
+        Do
+            Debug.Print("Sigo")
+            Call SiNo()
+            If RR% <> 2 Then Exit Do
             'Correcion()
-            GoTo 50440
-        End If
+        Loop
         If RR% Then
             OtraPantalla()
         Else
@@ -1821,23 +1816,20 @@ OTROAR:
 
     Sub SiNo()
         ' si o no
-50410:
         Debug.Print("..? (s/n) ")
         RR% = -1
-50415:
-        Y# = 0
-        RutinaInput()
-        A = "S"
-        If A$ = "N" Then
-            RR% = 0
-        ElseIf A$ = "S" Then
-            RR% = 1
-        ElseIf A$ = "E" And FlgEdicion = 1 Then
-            RR% = 2
-        End If
-        If RR% < 0 Then
-            GoTo 50415
-        End If
+        Do While RR% < 0
+            Y# = 0
+            RutinaInput()
+            A = "S"
+            If A$ = "N" Then
+                RR% = 0
+            ElseIf A$ = "S" Then
+                RR% = 1
+            ElseIf A$ = "E" And FlgEdicion = 1 Then
+                RR% = 2
+            End If
+        Loop
     End Sub
 
     Sub RutinaInput()
@@ -2004,3 +1996,4 @@ Public Class EncodedStringWriter
     End Property
 
 End Class
+
