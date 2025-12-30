@@ -15,6 +15,8 @@ Public Class Info
     Dim overwriteMode As Boolean
     Dim UltimaTeclaApretada As Integer
     Private Sub Info_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        AppLogger.Info("Iniciando formulario Info")
+        
         ' cultura para xfnd    
         Dim r As New Globalization.CultureInfo("es-ES")
         r.NumberFormat.NumberDecimalSeparator = "."
@@ -69,7 +71,8 @@ Public Class Info
             Ret = x.MoveNext
         Loop
         x.Close()
-
+        
+        AppLogger.Info("Formulario Info cargado. Archivos encontrados: " & Cmbox.Items.Count.ToString())
         Comienza()
     End Sub
 
@@ -81,10 +84,13 @@ Public Class Info
     Public Sub ParseSchema(ByVal schema As String)
         Dim myStreamReader As StreamReader = Nothing
         Try
+            AppLogger.Debug("Leyendo schema: " & schema)
             myStreamReader = New StreamReader(schema)
             Console.WriteLine("Reading Schema file ...")
             myXmlDataDocument.DataSet.ReadXmlSchema(myStreamReader)
+            AppLogger.Info("Schema cargado exitosamente")
         Catch e As Exception
+            AppLogger.Error(e, "Error al leer schema: " & schema)
             Console.WriteLine("Exception: " & e.ToString())
         Finally
             If Not myStreamReader Is Nothing Then
@@ -248,6 +254,7 @@ Public Class Info
         Buttons = MsgBoxStyle.YesNoCancel + MsgBoxStyle.DefaultButton2
         Ans = MsgBox(Msg, Buttons, Title)
         If Ans = MsgBoxResult.Yes Then
+            AppLogger.Info("Usuario cerró el formulario Info")
             Me.Close()
         ElseIf Ans = MsgBoxResult.No Then
         ElseIf Ans = MsgBoxResult.Cancel Then
@@ -259,6 +266,7 @@ Public Class Info
 
     Private Sub BtnEjecuta_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnEjecuta.Click
         If TextBox2.Text.Trim <> "" Then
+            AppLogger.LogOperation("EJECUTAR", "Query: " & TextBox2.Text.Trim)
             ARINFO(1, 1)
         End If
     End Sub
@@ -569,18 +577,18 @@ Public Class Info
         Dim dt As DataTable = Ds.Tables(0).GetChanges(DataRowState.Added Or DataRowState.Modified)
         If Not dt Is Nothing Then
             Dim rowcount As Integer = dt.Rows.Count
+            AppLogger.LogOperation("UPDATE", "Actualizando " & rowcount.ToString() & " registros")
             For i As Integer = 0 To dt.Rows.Count - 1
-                Debug.Print(dt.Rows(i)("Bookmark").ToString())
+                AppLogger.Debug("Bookmark: " & dt.Rows(i)("Bookmark").ToString())
                 x.Vbtrv1.BtrievePosition = dt.Rows(i)("Bookmark")
                 x.Vbtrv1.Edit()
                 For j As Integer = 1 To dt.Columns.Count - 1
                     x.Vbtrv1.Field(P(j) - 1) = dt.Rows(i)((j)).ToString()
-                    Debug.Print(x.Vbtrv1.Field(P(j) - 1).ToString)
-                    Debug.Print(dt.Rows(i)((j)).ToString())
                 Next
                 rc = x.Vbtrv1.Update
             Next
             dt.AcceptChanges()
+            AppLogger.Info("Actualización completada")
         End If
     End Sub
 
