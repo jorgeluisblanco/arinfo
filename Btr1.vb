@@ -204,64 +204,67 @@ Public Class Btr
 
         End If
         Dim Status As Short = 666
-OtraBitri1:
-        Select Case OpCode
-            Case 2
-                'inserta
-                Status = Vbtrv1.InsertRecord
-            Case 3
-                'corrige
-                Status = Vbtrv1.UpdateRecord
-            Case 4
-                'borra
-                Status = Vbtrv1.Delete
-            Case 6
-                Status = Vbtrv1.MoveNext()
-            Case 7
-                Status = Vbtrv1.MovePrevious()
-            Case 12
-                Status = Vbtrv1.MoveFirst()
-            Case 13
-                Status = Vbtrv1.MoveLast()
-            Case 5
-                Status = Bseek("=", ValorClave)
-            Case 8
-                Status = Bseek(">", ValorClave)
-            Case 9
-                Status = Bseek(">=", ValorClave)
-            Case 10
-                Status = Bseek("<", ValorClave)
-            Case 11
-                Status = Bseek("<=", ValorClave)
-            Case Else
-        End Select
-        If Status = 0 Then
-            If CurNroFiltro <> 0 Then
-                RaiseEvent Filtros(Habilitacion, Parametros, CurNroFiltro)
-            End If
-            If Habilitacion = 1 Then
-                If OpCode = 8 Or OpCode = 10 Then
-                    Adelante = 8
-                    Atras = 10
-                Else
-                    Adelante = 6
-                    Atras = 7
+        Dim continueLoop As Boolean = True
+        Do While continueLoop
+            continueLoop = False
+            Select Case OpCode
+                Case 2
+                    'inserta
+                    Status = Vbtrv1.InsertRecord
+                Case 3
+                    'corrige
+                    Status = Vbtrv1.UpdateRecord
+                Case 4
+                    'borra
+                    Status = Vbtrv1.Delete
+                Case 6
+                    Status = Vbtrv1.MoveNext()
+                Case 7
+                    Status = Vbtrv1.MovePrevious()
+                Case 12
+                    Status = Vbtrv1.MoveFirst()
+                Case 13
+                    Status = Vbtrv1.MoveLast()
+                Case 5
+                    Status = Bseek("=", ValorClave)
+                Case 8
+                    Status = Bseek(">", ValorClave)
+                Case 9
+                    Status = Bseek(">=", ValorClave)
+                Case 10
+                    Status = Bseek("<", ValorClave)
+                Case 11
+                    Status = Bseek("<=", ValorClave)
+                Case Else
+            End Select
+            If Status = 0 Then
+                If CurNroFiltro <> 0 Then
+                    RaiseEvent Filtros(Habilitacion, Parametros, CurNroFiltro)
                 End If
-                Select Case OpCode
-                    Case 0
-                    Case 12, 9, 6, 8
-                        OpCode = Adelante
-                        GoTo OtraBitri1
-                    Case 13, 11, 7, 10
-                        OpCode = Atras
-                        GoTo OtraBitri1
-                    Case Else
-                        Stop
-                End Select
-            ElseIf Habilitacion = 2 Then
-                Status = 9
+                If Habilitacion = 1 Then
+                    If OpCode = 8 Or OpCode = 10 Then
+                        Adelante = 8
+                        Atras = 10
+                    Else
+                        Adelante = 6
+                        Atras = 7
+                    End If
+                    Select Case OpCode
+                        Case 0
+                        Case 12, 9, 6, 8
+                            OpCode = Adelante
+                            continueLoop = True
+                        Case 13, 11, 7, 10
+                            OpCode = Atras
+                            continueLoop = True
+                        Case Else
+                            Stop
+                    End Select
+                ElseIf Habilitacion = 2 Then
+                    Status = 9
+                End If
             End If
-        End If
+        Loop
         System.Windows.Forms.Cursor.Current = Cursors.Default
         Return Status
     End Function
@@ -281,64 +284,67 @@ OtraBitri1:
 
         End If
         Dim Status As Short = 666
-OtraBitri1:
-        Select Case OpCode
-            Case 2
-                'inserta
-                Status = Vbtrv1.InsertRecord
-            Case 3
-                'corrige
-                Status = Vbtrv1.UpdateRecord
-            Case 4
-                'borra
-                Status = Vbtrv1.Delete
-            Case 6
-                Status = Vbtrv1.MoveNext()
-            Case 7
-                Status = Vbtrv1.MovePrevious()
-            Case 12
-                Status = Vbtrv1.MoveFirst()
-            Case 13
-                Status = Vbtrv1.MoveLast()
-            Case 5
-                Status = Bseek("=", ValorClave)
-            Case 8
-                Status = Bseek(">", ValorClave)
-            Case 9
-                Status = Bseek(">=", ValorClave)
-            Case 10
-                Status = Bseek("<", ValorClave)
-            Case 11
-                Status = Bseek("<=", ValorClave)
-            Case Else
-        End Select
-        If Status = 0 Then
-            If CurNroFiltro <> 0 Then
-                RaiseEvent Filtros(Habilitacion, Parametros, CurNroFiltro)
-            End If
-            If Habilitacion = 1 Then
-                If OpCode = 8 Or OpCode = 10 Then
-                    Adelante = 8
-                    Atras = 10
-                Else
-                    Adelante = 6
-                    Atras = 7
+        Dim continueLoop As Boolean = True
+        Do While continueLoop
+            continueLoop = False
+            Select Case OpCode
+                Case 2
+                    'inserta
+                    Status = Vbtrv1.InsertRecord
+                Case 3
+                    'corrige
+                    Status = Vbtrv1.UpdateRecord
+                Case 4
+                    'borra
+                    Status = Vbtrv1.Delete
+                Case 6
+                    Status = Vbtrv1.MoveNext()
+                Case 7
+                    Status = Vbtrv1.MovePrevious()
+                Case 12
+                    Status = Vbtrv1.MoveFirst()
+                Case 13
+                    Status = Vbtrv1.MoveLast()
+                Case 5
+                    Status = Bseek("=", ValorClave)
+                Case 8
+                    Status = Bseek(">", ValorClave)
+                Case 9
+                    Status = Bseek(">=", ValorClave)
+                Case 10
+                    Status = Bseek("<", ValorClave)
+                Case 11
+                    Status = Bseek("<=", ValorClave)
+                Case Else
+            End Select
+            If Status = 0 Then
+                If CurNroFiltro <> 0 Then
+                    RaiseEvent Filtros(Habilitacion, Parametros, CurNroFiltro)
                 End If
-                Select Case OpCode
-                    Case 0
-                    Case 12, 9, 6, 8
-                        OpCode = Adelante
-                        GoTo OtraBitri1
-                    Case 13, 11, 7, 10
-                        OpCode = Atras
-                        GoTo OtraBitri1
-                    Case Else
-                        Stop
-                End Select
-            ElseIf Habilitacion = 2 Then
-                Status = 9
+                If Habilitacion = 1 Then
+                    If OpCode = 8 Or OpCode = 10 Then
+                        Adelante = 8
+                        Atras = 10
+                    Else
+                        Adelante = 6
+                        Atras = 7
+                    End If
+                    Select Case OpCode
+                        Case 0
+                        Case 12, 9, 6, 8
+                            OpCode = Adelante
+                            continueLoop = True
+                        Case 13, 11, 7, 10
+                            OpCode = Atras
+                            continueLoop = True
+                        Case Else
+                            Stop
+                    End Select
+                ElseIf Habilitacion = 2 Then
+                    Status = 9
+                End If
             End If
-        End If
+        Loop
         System.Windows.Forms.Cursor.Current = Cursors.Default
         Return Status
     End Function
@@ -359,64 +365,67 @@ OtraBitri1:
 
         End If
         Dim Status As Short = 666
-OtraBitri1:
-        Select Case OpCode
-            Case 2
-                'inserta
-                Status = Vbtrv1.InsertRecord
-            Case 3
-                'corrige
-                Status = Vbtrv1.UpdateRecord
-            Case 4
-                'borra
-                Status = Vbtrv1.Delete
-            Case 6
-                Status = Vbtrv1.MoveNext()
-            Case 7
-                Status = Vbtrv1.MovePrevious()
-            Case 12
-                Status = Vbtrv1.MoveFirst()
-            Case 13
-                Status = Vbtrv1.MoveLast()
-            Case 5
-                Status = Bseek("=", ValorClave)
-            Case 8
-                Status = Bseek(">", ValorClave)
-            Case 9
-                Status = Bseek(">=", ValorClave)
-            Case 10
-                Status = Bseek("<", ValorClave)
-            Case 11
-                Status = Bseek("<=", ValorClave)
-            Case Else
-        End Select
-        If Status = 0 Then
-            If CurNroFiltro <> 0 Then
-                RaiseEvent Filtros(Habilitacion, Parametros, CurNroFiltro)
-            End If
-            If Habilitacion = 1 Then
-                If OpCode = 8 Or OpCode = 10 Then
-                    Adelante = 8
-                    Atras = 10
-                Else
-                    Adelante = 6
-                    Atras = 7
+        Dim continueLoop As Boolean = True
+        Do While continueLoop
+            continueLoop = False
+            Select Case OpCode
+                Case 2
+                    'inserta
+                    Status = Vbtrv1.InsertRecord
+                Case 3
+                    'corrige
+                    Status = Vbtrv1.UpdateRecord
+                Case 4
+                    'borra
+                    Status = Vbtrv1.Delete
+                Case 6
+                    Status = Vbtrv1.MoveNext()
+                Case 7
+                    Status = Vbtrv1.MovePrevious()
+                Case 12
+                    Status = Vbtrv1.MoveFirst()
+                Case 13
+                    Status = Vbtrv1.MoveLast()
+                Case 5
+                    Status = Bseek("=", ValorClave)
+                Case 8
+                    Status = Bseek(">", ValorClave)
+                Case 9
+                    Status = Bseek(">=", ValorClave)
+                Case 10
+                    Status = Bseek("<", ValorClave)
+                Case 11
+                    Status = Bseek("<=", ValorClave)
+                Case Else
+            End Select
+            If Status = 0 Then
+                If CurNroFiltro <> 0 Then
+                    RaiseEvent Filtros(Habilitacion, Parametros, CurNroFiltro)
                 End If
-                Select Case OpCode
-                    Case 0
-                    Case 12, 9, 6, 8
-                        OpCode = Adelante
-                        GoTo OtraBitri1
-                    Case 13, 11, 7, 10
-                        OpCode = Atras
-                        GoTo OtraBitri1
-                    Case Else
-                        Stop
-                End Select
-            ElseIf Habilitacion = 2 Then
-                Status = 9
+                If Habilitacion = 1 Then
+                    If OpCode = 8 Or OpCode = 10 Then
+                        Adelante = 8
+                        Atras = 10
+                    Else
+                        Adelante = 6
+                        Atras = 7
+                    End If
+                    Select Case OpCode
+                        Case 0
+                        Case 12, 9, 6, 8
+                            OpCode = Adelante
+                            continueLoop = True
+                        Case 13, 11, 7, 10
+                            OpCode = Atras
+                            continueLoop = True
+                        Case Else
+                            Stop
+                    End Select
+                ElseIf Habilitacion = 2 Then
+                    Status = 9
+                End If
             End If
-        End If
+        Loop
         System.Windows.Forms.Cursor.Current = Cursors.Default
         Return Status
     End Function
