@@ -1,4 +1,6 @@
-﻿Imports System.ComponentModel
+﻿Option Strict On
+Option Explicit On
+Imports System.ComponentModel
 Imports System.Environment
 Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.Strings
@@ -58,7 +60,7 @@ Public Class FormBtr
         Campo_0.Font = New System.Drawing.Font(NewFFont, NewEmSize, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) ' 9.75
         titulo_0.Font = New System.Drawing.Font(NewFFont, NewEmSize, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) ' 9.75
         Dim x As Short = 0
-        For X = 1 To (VBtrv.Campos.Count - 0)
+        For X = 1S To CShort(VBtrv.Campos.Count - 0)
             Dim Campo As New TextBox
             Campo.Name = "Campo_" & X
             Campo.AcceptsReturn = True
@@ -107,15 +109,15 @@ Public Class FormBtr
         Dim g As Graphics = titulo_0.CreateGraphics()
         Dim sz As SizeF
         Dim text As String
-        Dim Grosor As Short = (g.MeasureString("M", Campo_0.Font).Height) + 4
+        Dim Grosor As Short = CShort(g.MeasureString("M", Campo_0.Font).Height + 4)
         Dim MaxWidth As Short = 0
         Dim MaxHeight As Short = 0
         With Me
-            For x = 1 To (VBtrv.Campos.Count - 2)
+            For x = 1S To CShort(VBtrv.Campos.Count - 2)
                 Ofset = 5
                 Fila = VBtrv.Campos(x - 1).Fila
                 sz = g.MeasureString("M", titulo_0.Font)
-                Colum = (VBtrv.Campos(x - 1).Columna * sz.Width) + 2
+                Colum = CShort(VBtrv.Campos(x - 1).Columna * sz.Width + 2)
                 Titulos(x).Visible = False
                 Campos(x).Visible = False
 
@@ -134,7 +136,7 @@ Public Class FormBtr
                 Campos(x).Width = VBtrv.Campos(x - 1).Ancho * (CType(sz.Width, Integer)) + 2
                 Campos(x).Height = (CType(sz.Height, Integer)) + 2
 
-                Paso = (Fila - 3) * (Grosor + 4)
+                Paso = CShort((Fila - 3) * (Grosor + 4))
 
                 Titulos(x).Top = Ofset + Paso
                 Titulos(x).Text = VBtrv.Campos(x - 1).Titulo
@@ -148,10 +150,10 @@ Public Class FormBtr
                 Titulos(x).Visible = True
                 Campos(x).Visible = True
                 If (Campos(x).Top + Campos(x).Height) > MaxHeight Then
-                    MaxHeight = Campos(x).Top + Grosor
+                    MaxHeight = CShort(Campos(x).Top + Grosor)
                 End If
                 If (Campos(x).Left + Campos(x).Width) > MaxWidth Then
-                    MaxWidth = Campos(x).Left + Campos(x).Width
+                    MaxWidth = CShort(Campos(x).Left + Campos(x).Width)
                 End If
             Next
             Titulos(0).Visible = False
@@ -171,7 +173,7 @@ Public Class FormBtr
         GrupoBotones.Left = GrupoFicha.Left
         GrupoBotones.Width = GrupoFicha.Width
         GrupoBotones.Height = 120
-        AnchoPantalla = GrupoBotones.Width - 5
+        AnchoPantalla = CShort(GrupoBotones.Width - 5)
 
         Me.StartPosition = FormStartPosition.Manual
 
@@ -234,7 +236,7 @@ Public Class FormBtr
 
     Sub abrearchivos()
         If Btr.Btrs.ContainsKey(parli.Tabla) Then
-            VBtrv = Btr.Btrs.Item(parli.Tabla)
+            VBtrv = DirectCast(Btr.Btrs.Item(parli.Tabla), Btr)
         Else
             VBtrv.Tabla = parli.Tabla
             VBtrv.Archivo = parli.Archivo
@@ -249,7 +251,7 @@ Public Class FormBtr
     End Sub
 
     Private Sub Campos_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
-        Dim Index As Short = Campos.Index(eventSender)
+        Dim Index As Short = CShort(Campos.Index(eventSender))
         If Index <> 0 Then
 
         End If
@@ -269,12 +271,12 @@ Public Class FormBtr
         Dim Index As Short
         If TypeOf sender Is FormBtr Then
             If TypeOf Me.ActiveControl Is System.Windows.Forms.TextBox Then
-                Index = Campos.Index(Me.ActiveControl)
+                Index = CShort(Campos.Index(Me.ActiveControl))
             Else
                 Exit Sub
             End If
         ElseIf TypeOf sender Is System.Windows.Forms.TextBox Then
-            Index = Campos.Index(sender)
+            Index = CShort(Campos.Index(sender))
         Else
             Exit Sub
         End If
@@ -300,12 +302,12 @@ Public Class FormBtr
             Dim Index As Short
             If TypeOf sender Is FormBtr Then
                 If TypeOf Me.ActiveControl Is System.Windows.Forms.TextBox Then
-                    Index = Campos.Index(Me.ActiveControl)
+                    Index = CShort(Campos.Index(Me.ActiveControl))
                 Else
                     Exit Sub
                 End If
             ElseIf TypeOf sender Is System.Windows.Forms.TextBox Then
-                Index = Campos.Index(sender)
+                Index = CShort(Campos.Index(sender))
             Else
                 Exit Sub
             End If
@@ -320,12 +322,12 @@ Public Class FormBtr
         Dim Index As Short
         If TypeOf sender Is FormBtr Then
             If TypeOf Me.ActiveControl Is System.Windows.Forms.TextBox Then
-                Index = Campos.Index(Me.ActiveControl)
+                Index = CShort(Campos.Index(Me.ActiveControl))
             Else
                 Exit Sub
             End If
         ElseIf TypeOf sender Is System.Windows.Forms.TextBox Then
-            Index = Campos.Index(sender)
+            Index = CShort(Campos.Index(sender))
         Else
             Exit Sub
         End If
@@ -403,13 +405,13 @@ Public Class FormBtr
                     ByVal e As System.EventArgs)
         '
         Dim txt As TextBox = CType(sender, TextBox)
-        Dim Index As Integer = txt.Tag
+        Dim Index As Integer = CInt(txt.Tag)
         txt.SelectAll()
         EnEdicion = True
     End Sub
     Private Sub TextBox1_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim txt As TextBox = CType(sender, TextBox)
-        Dim Index As Integer = txt.Tag
+        Dim Index As Integer = CInt(txt.Tag)
         If EnEdicion = True Then
             Actualiza = True
         End If
@@ -423,7 +425,7 @@ Public Class FormBtr
                      ByVal e As System.Windows.Forms.KeyPressEventArgs)
         '
         Dim txt As TextBox = CType(sender, TextBox)
-        Dim Index As Integer = txt.Tag
+        Dim Index As Integer = CInt(txt.Tag)
         Dim MaxIndex As Integer = 20
 
         If e.KeyChar = ChrW(Keys.Escape) Then
@@ -442,7 +444,7 @@ Public Class FormBtr
     
     Private Sub TextBox1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs)
         Dim txt As TextBox = CType(sender, TextBox)
-        Dim Index As Integer = txt.Tag
+        Dim Index As Integer = CInt(txt.Tag)
         Dim MaxIndex As Integer = 20
         Select Case e.KeyCode
             Case Keys.Enter, Keys.Down, Keys.Tab ', Keys.Menu
@@ -475,14 +477,14 @@ Public Class FormBtr
 
     Private Sub LimpiarForm()
         Dim X As Short
-        For X = 1 To (VBtrv.Campos.Count - 2)
+        For X = 1S To CShort(VBtrv.Campos.Count - 2)
             Me.Campos(X).Text = " "
         Next
     End Sub
 
     Sub DisableForm()
         Dim X As Short
-        For X = 1 To (VBtrv.Campos.Count - 2)
+        For X = 1S To CShort(VBtrv.Campos.Count - 2)
             Me.Campos(X).Enabled = False
             'Me.Campos(X).BackColor = System.Drawing.SystemColors.InactiveCaptionText 
         Next
@@ -490,7 +492,7 @@ Public Class FormBtr
 
     Sub EnableForm()
         Dim X As Short
-        For X = 1 To (VBtrv.Campos.Count - 2)
+        For X = 1S To CShort(VBtrv.Campos.Count - 2)
             Me.Campos(X).Enabled = True
             Me.Campos(X).BackColor = System.Drawing.SystemColors.Window
         Next
@@ -498,7 +500,7 @@ Public Class FormBtr
     Sub LlenarForm()
         Me.Text = UCase(Me.VBtrv.Tabla) & "    " & Me.VBtrv.Keyval & "    " & Me.VBtrv.NameKeyval
         Dim X As Short
-        For X = 1 To (VBtrv.Campos.Count - 2)
+        For X = 1S To CShort(VBtrv.Campos.Count - 2)
             Me.Campos(X).Text = VBtrv.Campo(X)
         Next
         If VBtrv.Tabla = "articu2" Then
@@ -508,7 +510,7 @@ Public Class FormBtr
 
     Sub LlenarCampos()
         Dim X As Short
-        For X = 1 To (VBtrv.Campos.Count - 2)
+        For X = 1S To CShort(VBtrv.Campos.Count - 2)
             VBtrv.Campo(X) = Me.Campos(X).Text
         Next
       
@@ -608,7 +610,7 @@ Public Class FormBtr
         Dim Keyval As String = ""
         Dim Index As Integer = Me.VBtrv.Vbtrv1.IndexNumber
         If Index + 1 < Me.VBtrv.Vbtrv1.IndexCount Then
-            Me.VBtrv.Vbtrv1.IndexNumber = Index + 1
+            Me.VBtrv.Vbtrv1.IndexNumber = CShort(Index + 1)
         Else
             Me.VBtrv.Vbtrv1.IndexNumber = 0
         End If
@@ -954,7 +956,7 @@ Public Class FormBtr
             Funcion = 12
         Else
             VBtrv.Vbtrv1.BtrievePosition = Busquedadesde
-            Funcion = Adelante
+            Funcion = CShort(Adelante)
         End If
         Status = 0
         While Status <> 9
@@ -968,13 +970,13 @@ Public Class FormBtr
             End Select
             'If InStr(Campo(CampoDeBusqueda), Busqueda) <> 0 Then
             If Status = 0 Then
-                If InStr(VBtrv.Campo(CampoDeBusqueda), Busqueda) <> 0 Then
+                If InStr(VBtrv.Campo(CShort(CampoDeBusqueda)), Busqueda) <> 0 Then
                     Busquedadesde = VBtrv.Vbtrv1.BtrievePosition
                     LlenarForm()
                     EstaEnBusqueda = False
                     Exit Sub
                 End If
-                Funcion = Adelante
+                Funcion = CShort(Adelante)
             End If
             'If Not GetInputState = 0 Then Application.DoEvents()
             If FuerzaSalida = True Then
@@ -1056,7 +1058,7 @@ Public Class FormBtr
         alstBotones.Clear()
         If Me.GrupoBotones.Controls.Count > 0 Then
             For x As Integer = Me.GrupoBotones.Controls.Count - 1 To 0 Step -1
-                If Me.GrupoBotones.Controls.Item(x).Tag = "XX" Then
+                If CStr(Me.GrupoBotones.Controls.Item(x).Tag) = "XX" Then
                     Me.GrupoBotones.Controls.RemoveAt(x)
                 End If
             Next
@@ -1068,9 +1070,8 @@ Public Class FormBtr
     End Sub
     Public Sub AgregarTitulo(ByVal Cadena As String)
         Titulou.Text = Cadena
-        Dim LObj As Object = Titulou
         Titulou.Height = 30
-        Dim L As Graphics = LObj.CreateGraphics()
+        Dim L As Graphics = DirectCast(Titulou, Control).CreateGraphics()
         Titulou.Width = 200
         Titulou.Font = UltraButton.Font
         Dim sz As SizeF
@@ -1080,10 +1081,9 @@ Public Class FormBtr
 
     Public Sub AgregarTexto(ByVal Cadena As String)
         TxtBuscaPorClave.Text = Cadena
-        Dim LObj As Object = TxtBuscaPorClave
         TxtBuscaPorClave.Height = 30
         TxtBuscaPorClave.Font = UltraButton.Font
-        Dim L As Graphics = LObj.CreateGraphics()
+        Dim L As Graphics = DirectCast(TxtBuscaPorClave, Control).CreateGraphics()
         TxtBuscaPorClave.Width = 200
         Dim sz As SizeF
         sz = L.MeasureString(Cadena, TxtBuscaPorClave.Font)
@@ -1093,9 +1093,8 @@ Public Class FormBtr
 
     Public Sub AgregarBoton(ByVal Cadena As String)
         Dim cmdBoton As New UltraButton()
-        Dim LObj As Object = UltraButton
         UltraButton.Height = 30
-        Dim L As Graphics = LObj.CreateGraphics()
+        Dim L As Graphics = DirectCast(UltraButton, Control).CreateGraphics()
         cmdBoton.BackColor = UltraButton.BackColor
         cmdBoton.ButtonStyle = UltraButton.ButtonStyle
         cmdBoton.UseOsThemes = UltraButton.UseOsThemes
@@ -1107,8 +1106,8 @@ Public Class FormBtr
         cmdBoton.TabIndex = 0
         Dim sz As SizeF
         sz = L.MeasureString(Cadena, cmdBoton.Font)
-        If Anchors < CType(sz.Width, Integer) Then
-            Anchors = CType(sz.Width, Integer) + 5 ' + 20
+        If Anchors < CShort(sz.Width) Then
+            Anchors = CShort(sz.Width + 5) ' + 20
         End If
         alstBotones.Add(cmdBoton)
     End Sub
@@ -1133,7 +1132,7 @@ Public Class FormBtr
             Titulou.BackColor = Color.FromArgb(&HFFEAEAEA)
             Titulou.Height = 30
             Titulou.Visible = True
-            AnchoTotal += Titulou.Width + 5
+            AnchoTotal += CShort(Titulou.Width + 5)
         Else
             Titulou.Visible = False
         End If
@@ -1142,7 +1141,7 @@ Public Class FormBtr
             TxtBuscaPorClave.Location = New System.Drawing.Point(AnchoTotal, Posmenu + 5)
             TxtBuscaPorClave.UseOsThemes = UltraButton.UseOsThemes
             TxtBuscaPorClave.Visible = True
-            AnchoTotal += TxtBuscaPorClave.Width + 5
+            AnchoTotal += CShort(TxtBuscaPorClave.Width + 5)
         Else
             TxtBuscaPorClave.Visible = False
         End If
@@ -1156,11 +1155,11 @@ Public Class FormBtr
             cmdBoton.Width = Anchors + 10
             cmdBoton.Appearance.TextHAlign = Infragistics.Win.HAlign.Left
             If AnchoTotal + cmdBoton.Width + 5 > AnchoPantalla Then
-                Otralinea += 35
+                Otralinea += 35S
                 AnchoTotal = 5
             End If
             cmdBoton.Location = New System.Drawing.Point(AnchoTotal, Posmenu + Otralinea)
-            AnchoTotal += cmdBoton.Width + 5
+            AnchoTotal += CShort(cmdBoton.Width + 5)
             AddHandler cmdBoton.Click, AddressOf EventoClick
             cmdBoton.Tag = "XX"
             Me.GrupoBotones.Controls.Add(cmdBoton)
@@ -1212,7 +1211,7 @@ Public Class FormBtr
             Case Else
                 Key = ""
         End Select
-        If Len(Key) Then
+        If Len(Key) <> 0 Then
             e.Handled = True
             Dim cmdBoton As New Infragistics.Win.Misc.UltraButton()
             Dim intI As Integer
@@ -1238,7 +1237,7 @@ Public Class FormBtr
     Private Sub EventoClick(ByVal Sender As System.Object, ByVal e As EventArgs)
         Dim Key As String = ""
         Dim Variable As String = CType(Sender, UltraButton).Text
-        If InStr(Variable, "-") Then
+        If InStr(Variable, "-") <> 0 Then
             Key = Trim(Mid(Variable, 1, InStr(Variable, "-") - 1))
         End If
         MenusKeys(Key)
@@ -1272,9 +1271,9 @@ Public Class Archivos
         L.TopMost = True
         L.Focus()
         If L.ShowDialog() = DialogResult.OK Then
-            Return True
+            Return 1
         Else
-            Return True
+            Return 0
         End If
     End Function
     Public Overloads Shared Function Show(ByRef Archivo As clsParametrosdeArchivo, ByVal EsIngreso As Boolean, ByRef Ingresado As String) As Integer
@@ -1284,10 +1283,10 @@ Public Class Archivos
         L.Focus()
         If L.ShowDialog() = DialogResult.OK Then
             Ingresado = L.IngresadoAutomatico
-            Return True
+            Return 1
         Else
             Ingresado = L.IngresadoAutomatico
-            Return True
+            Return 0
         End If
     End Function
 End Class
