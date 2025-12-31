@@ -258,9 +258,9 @@ Public Class FormBtr
     Private Sub FormateaCampos(ByVal Index As Short)
         Select Case VBtrv.Campos(Index - 1).Numerico
             Case 1
-                Campos(Index).Text = XFND(Val(Campos(Index).Text), VBtrv.Campos(Index - 1).Ancho, VBtrv.Campos(Index - 1).Decimales)
+                Campos(Index).Text = XFND(QB.SafeToDouble(Campos(Index).Text), VBtrv.Campos(Index - 1).Ancho, VBtrv.Campos(Index - 1).Decimales)
             Case 2, 3
-                Campos(Index).Text = XFND0(Val(Campos(Index).Text), VBtrv.Campos(Index - 1).Ancho, VBtrv.Campos(Index - 1).Decimales)
+                Campos(Index).Text = XFND0(QB.SafeToDouble(Campos(Index).Text), VBtrv.Campos(Index - 1).Ancho, VBtrv.Campos(Index - 1).Decimales)
             Case Else
         End Select
     End Sub
@@ -502,7 +502,7 @@ Public Class FormBtr
             Me.Campos(X).Text = VBtrv.Campo(X)
         Next
         If VBtrv.Tabla = "articu2" Then
-            Me.Campos(12).Text = XFND(Val(Me.Campos(9).Text) + Val(Me.Campos(10).Text) - Val(Me.Campos(11).Text), 10, 3)
+            Me.Campos(12).Text = XFND(QB.SafeToDouble(Me.Campos(9).Text) + QB.SafeToDouble(Me.Campos(10).Text) - QB.SafeToDouble(Me.Campos(11).Text), 10, 3)
         End If
     End Sub
 
@@ -578,7 +578,7 @@ Public Class FormBtr
         If resB <> 0 Then
             MsgBox("Error de Insercion, Btrieve error: " & resB, MsgBoxStyle.OkOnly)
         End If
-        IngresadoAutomatico = XFND0(Val(VBtrv.Campo(1)) + 1, 4, 0)
+        IngresadoAutomatico = XFND0(QB.SafeToDouble(VBtrv.Campo(1)) + 1, 4, 0)
     End Sub
 
     Sub Borra()
@@ -654,13 +654,13 @@ Public Class FormBtr
                         RemoveEdicionIngreso()
                         MenuSeguroSioNo()
                     Case Else
-                        Dim Index As Short = Val(Entrada)
+                        Dim Index As Short = QB.SafeToShort(Entrada)
                         Campos(Index).Focus()
                         MenuCorreccion()
                 End Select
             Case 4
                 'HfrmBusca
-                CampoDeBusqueda = Val(Entrada)
+                CampoDeBusqueda = QB.SafeToInteger(Entrada)
                 MenuQueBuscas()
             Case 8
                 Busqueda = Entrada

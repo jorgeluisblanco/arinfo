@@ -229,7 +229,7 @@ Module Arinfon
                 If Not parser.EndOfData Then
                     Dim firstLine As String() = parser.ReadFields()
                     If firstLine IsNot Nothing AndAlso firstLine.Length > 0 Then
-                        NroInstruccionesArchivadas = CShort(Val(firstLine(0)))
+                        NroInstruccionesArchivadas = QB.SafeToShort(firstLine(0))
                     End If
                 End If
 
@@ -327,7 +327,7 @@ Module Arinfon
                     Continue Do
                 End If
 
-                Y# = Val(B$)
+                Y# = QB.SafeToDouble(B$)
                 If Y# > 0 And Y# <= NroInstruccionesArchivadas Then
                     B$ = InstruccionesArchivadas(Y#)
                     Debug.Print(B$)
@@ -1018,7 +1018,7 @@ Module Arinfon
     Sub LeeOrdena()
         IndiceOrden = IndiceOrden + 1
         If FA% = 0 Then
-            YA = Val(Arbtr(Ar).Campo(OrdenxCampo))
+            YA = QB.SafeToDouble(Arbtr(Ar).Campo(OrdenxCampo))
             DD = XFND0(YA, LargoCampoOrden, DeciCampoOrden)
         Else
             DD = Arbtr(Ar).Campo(OrdenxCampo)
@@ -1060,7 +1060,7 @@ Module Arinfon
                 YM# = ZZ#(IndH)
             Else
                 'If TipoDeCampo(M%) Then
-                YM# = Val(Arbtr(Ar).Campo(M%))
+                YM# = QB.SafeToDouble(Arbtr(Ar).Campo(M%))
                 'End If
             End If
             Select Case R%(IndH) ' operador
@@ -1177,7 +1177,7 @@ Module Arinfon
     End Function
     Sub Pregunta()
 50220:
-        LC% = Val(B$) ' pregunta
+        LC% = QB.SafeToInteger(B$) ' pregunta
         Debug.Print("              " & Mid(B$, 2) & "..? ")
         B$ = ""
         RutinaInput()
@@ -1418,7 +1418,7 @@ Module Arinfon
                         DD$ = XFNINV(DD$) ' fecha
                     End If
 
-                    Dim cumpleCondicion As Boolean = (Math.Sign(InStr(DD$, CL$(indH_eval))) Xor FLG%(indH_eval, 2) Or FLG%(indH_eval, 0) = 2 + Math.Sign(Val(DD$) - Z#(indH_eval)))
+                    Dim cumpleCondicion As Boolean = (Math.Sign(InStr(DD$, CL$(indH_eval))) Xor FLG%(indH_eval, 2) Or FLG%(indH_eval, 0) = 2 + Math.Sign(QB.SafeToDouble(DD$) - Z#(indH_eval)))
 
                     If cumpleCondicion Then
                         ' Salta filtros OR consecutivos si ya se cumplió el bloque
@@ -1631,8 +1631,8 @@ Module Arinfon
             If InStr(IndiceDeFrase, B$, " '") = IndiceDeFrase Then 'comienzo de clave
                 FI = IndiceDeFrase + 2
                 CL$(IndH) = Mid(B$, FI, InStr(FI, B$, "'") - FI) ' clave alfanumerica
-                FLG%(IndH, 0) = InStr("<=>", qb4.Left(CL$(IndH), 1)) 'menor igual mayor
-                Z#(IndH) = Val(Mid(CL$(IndH), 2)) ' clave numerica
+                FLG%(IndH, 0) = InStr("<=>)", qb4.Left(CL$(IndH), 1)) 'menor igual mayor
+                Z#(IndH) = QB.SafeToDouble(Mid(CL$(IndH), 2)) ' clave numerica
                 IndiceDeFrase = IndiceDeFrase + Len(CL$(IndH)) + 2
                 FLG%(IndH, 1) = P%(QQ) ' campo clave
                 IndH = IndH + 1
@@ -1649,7 +1649,7 @@ Module Arinfon
                 R%(QQ + 1) = ISS
                 G%(6) = 1
                 If R%(QQ) < 1 Then R%(QQ) = 1
-                ZZ#(QQ + 1) = Val(Mid(B$, IndiceDeFrase + 1))
+                ZZ#(QQ + 1) = QB.SafeToDouble(Mid(B$, IndiceDeFrase + 1))
                 If ZZ#(QQ + 1) Then
                     QQ = QQ + 1
                     IndiceDeFrase = IndiceDeFrase + 2
@@ -1854,7 +1854,7 @@ Module Arinfon
         'rutina input
 50310:
         'retorna ARRI%, B$, Y#        
-        Y# = Val(B$)
+        Y# = QB.SafeToDouble(B$)
         LC% = 0
     End Sub
 
