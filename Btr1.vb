@@ -1,4 +1,4 @@
-﻿Option Strict Off
+﻿Option Strict On
 Option Explicit On
 Public Class Btr
     Inherits System.Windows.Forms.Form
@@ -142,7 +142,7 @@ Public Class Btr
 
     Property Campo(ByVal iT As Short) As String
         Get
-            Return Vbtrv1.Field(iT - 1)
+            Return CStr(Vbtrv1.Field(iT - 1))
         End Get
         Set(ByVal Value As String)
             Vbtrv1.Field(iT - 1) = Value
@@ -156,24 +156,26 @@ Public Class Btr
 
     Sub DivideValorClave(ByVal ValorClave As String)
         Dim Index As Integer = Vbtrv1.IndexNumber
-        Dim CantidadDeSegmentos As Integer = Vbtrv1.SegmentCountOnIndex(Index)
+        Dim CantidadDeSegmentos As Integer = CInt(Vbtrv1.SegmentCountOnIndex(CShort(Index)))
         Dim ValoresClave(CantidadDeSegmentos) As String
         Dim Offset As Integer = 1
         For Segment As Integer = 1 To CantidadDeSegmentos
-            ValoresClave(Segment) = Mid(ValorClave, Offset, Vbtrv1.FieldSize(Vbtrv1.SegmentName(Index, Segment - 1)))
-            Offset = Offset + Vbtrv1.FieldSize(Vbtrv1.SegmentName(Index, Segment - 1))
+            Dim fieldSize As Integer = CInt(Vbtrv1.FieldSize(Vbtrv1.SegmentName(CShort(Index), CShort(Segment - 1))))
+            ValoresClave(Segment) = Mid(ValorClave, Offset, fieldSize)
+            Offset = Offset + fieldSize
             MsgBox(ValoresClave(Segment))
         Next
     End Sub
 
     Public Function Bseek(ByVal Comparacion As String, ByVal ValorClave As String) As Integer
         Dim Index As Integer = Vbtrv1.IndexNumber
-        Dim CantidadDeSegmentos As Integer = Vbtrv1.SegmentCountOnIndex(Index)
+        Dim CantidadDeSegmentos As Integer = CInt(Vbtrv1.SegmentCountOnIndex(CShort(Index)))
         Dim ValoresClave(CantidadDeSegmentos) As String
         Dim Offset As Integer = 1
         For Segment As Integer = 1 To CantidadDeSegmentos
-            ValoresClave(Segment) = Mid(ValorClave, Offset, Vbtrv1.FieldSize(Vbtrv1.SegmentName(Index, Segment - 1)))
-            Offset = Offset + Vbtrv1.FieldSize(Vbtrv1.SegmentName(Index, Segment - 1))
+            Dim fieldSize As Integer = CInt(Vbtrv1.FieldSize(Vbtrv1.SegmentName(CShort(Index), CShort(Segment - 1))))
+            ValoresClave(Segment) = Mid(ValorClave, Offset, fieldSize)
+            Offset = Offset + fieldSize
             'MsgBox(ValoresClave(Segment))
         Next
         Select Case CantidadDeSegmentos
@@ -246,15 +248,15 @@ Public Class Btr
                 Case 13
                     Status = Vbtrv1.MoveLast()
                 Case 5
-                    Status = Bseek("=", ValorClave)
+                    Status = CShort(Bseek("=", ValorClave))
                 Case 8
-                    Status = Bseek(">", ValorClave)
+                    Status = CShort(Bseek(">", ValorClave))
                 Case 9
-                    Status = Bseek(">=", ValorClave)
+                    Status = CShort(Bseek(">=", ValorClave))
                 Case 10
-                    Status = Bseek("<", ValorClave)
+                    Status = CShort(Bseek("<", ValorClave))
                 Case 11
-                    Status = Bseek("<=", ValorClave)
+                    Status = CShort(Bseek("<=", ValorClave))
                 Case Else
             End Select
             If Status = 0 Then
@@ -328,15 +330,15 @@ Public Class Btr
                 Case 13
                     Status = Vbtrv1.MoveLast()
                 Case 5
-                    Status = Bseek("=", ValorClave)
+                    Status = CShort(Bseek("=", ValorClave))
                 Case 8
-                    Status = Bseek(">", ValorClave)
+                    Status = CShort(Bseek(">", ValorClave))
                 Case 9
-                    Status = Bseek(">=", ValorClave)
+                    Status = CShort(Bseek(">=", ValorClave))
                 Case 10
-                    Status = Bseek("<", ValorClave)
+                    Status = CShort(Bseek("<", ValorClave))
                 Case 11
-                    Status = Bseek("<=", ValorClave)
+                    Status = CShort(Bseek("<=", ValorClave))
                 Case Else
             End Select
             If Status = 0 Then
@@ -411,15 +413,15 @@ Public Class Btr
                 Case 13
                     Status = Vbtrv1.MoveLast()
                 Case 5
-                    Status = Bseek("=", ValorClave)
+                    Status = CShort(Bseek("=", ValorClave))
                 Case 8
-                    Status = Bseek(">", ValorClave)
+                    Status = CShort(Bseek(">", ValorClave))
                 Case 9
-                    Status = Bseek(">=", ValorClave)
+                    Status = CShort(Bseek(">=", ValorClave))
                 Case 10
-                    Status = Bseek("<", ValorClave)
+                    Status = CShort(Bseek("<", ValorClave))
                 Case 11
-                    Status = Bseek("<=", ValorClave)
+                    Status = CShort(Bseek("<=", ValorClave))
                 Case Else
             End Select
             If Status = 0 Then
@@ -456,17 +458,19 @@ Public Class Btr
         Return Status
     End Function
     Public Function Keyval() As String
-        NameKeyval = Vbtrv1.IndexNumber & " |"
-        Dim Index As Integer = Vbtrv1.IndexNumber
-        Dim CantidadDeSegmentos As Integer = Vbtrv1.SegmentCountOnIndex(Index)
+        NameKeyval = Vbtrv1.IndexNumber.ToString() & " |"
+        Dim Index As Short = CShort(Vbtrv1.IndexNumber)
+        Dim CantidadDeSegmentos As Integer = CInt(Vbtrv1.SegmentCountOnIndex(Index))
         Dim Keyvalor As String = ""
         For Segment As Integer = 1 To CantidadDeSegmentos
-            Dim Variable As String = Mid(Vbtrv1.Field(Vbtrv1.SegmentName(Index, Segment - 1)) + Space(Vbtrv1.FieldSize(Vbtrv1.SegmentName(Index, Segment - 1))), 1, Vbtrv1.FieldSize(Vbtrv1.SegmentName(Index, Segment - 1)))
-            Keyvalor = Keyvalor + Variable
-            NameKeyval = NameKeyval & Vbtrv1.SegmentName(Index, Segment - 1) & "|"
+            Dim segName As String = Vbtrv1.SegmentName(Index, CShort(Segment - 1))
+            Dim fieldSize As Integer = CInt(Vbtrv1.FieldSize(segName))
+            Dim fieldValue As String = CStr(Vbtrv1.Field(segName))
+            Dim Variable As String = Mid(fieldValue & Space(fieldSize), 1, fieldSize)
+            Keyvalor = Keyvalor & Variable
+            NameKeyval = NameKeyval & segName & "|"
         Next
         Return Keyvalor
-        Me.NameKeyval = NameKeyval
     End Function
 End Class
 
