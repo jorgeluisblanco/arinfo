@@ -97,7 +97,7 @@ Public Class Btr
                     Dim firstLine As String() = parser.ReadFields()
                     If firstLine IsNot Nothing AndAlso firstLine.Length >= 2 Then
                         ' firstLine(0) es Dummy, firstLine(1) es NumerodeCampos
-                        NumerodeCampos = CInt(Val(firstLine(1)))
+                        NumerodeCampos = QB.SafeToInteger(firstLine(1))
                     End If
                 End If
 
@@ -114,11 +114,11 @@ Public Class Btr
                         TempCampo.CampoNumero = CShort(i)
                         
                         TempCampo.Titulo = line(0).Trim()
-                        TempCampo.Fila = CShort(Val(line(1)))
-                        TempCampo.Columna = CShort(Val(line(2)))
-                        TempCampo.Ancho = CShort(Val(line(3)))
-                        TempCampo.Numerico = CShort(Val(line(4)))
-                        TempCampo.Decimales = CShort(Val(line(5)))
+                        TempCampo.Fila = QB.SafeToShort(line(1))
+                        TempCampo.Columna = QB.SafeToShort(line(2))
+                        TempCampo.Ancho = QB.SafeToShort(line(3))
+                        TempCampo.Numerico = QB.SafeToShort(line(4))
+                        TempCampo.Decimales = QB.SafeToShort(line(5))
                         ' line(6) sería el Dummy si existiera en esa línea
 
                         LargodeRegistro = CShort(LargodeRegistro + TempCampo.Ancho)

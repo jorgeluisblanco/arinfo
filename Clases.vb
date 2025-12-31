@@ -320,6 +320,73 @@ Public Class QB
         Return Mid(Cadena, 1, Largo)
     End Function
 
+#Region "Funciones para reemplazar Val() - Compatibles con Option Strict On"
+    
+    ''' <summary>
+    ''' Convierte una cadena a Double de forma segura.
+    ''' Reemplaza la función legacy Val() con manejo de errores apropiado.
+    ''' </summary>
+    ''' <param name="text">Texto a convertir</param>
+    ''' <param name="defaultValue">Valor por defecto si la conversión falla (opcional, default 0)</param>
+    ''' <returns>El valor Double o el valor por defecto</returns>
+    Public Shared Function SafeToDouble(ByVal text As String, Optional ByVal defaultValue As Double = 0.0) As Double
+        If String.IsNullOrEmpty(text) Then Return defaultValue
+        
+        Dim result As Double
+        ' Limpiar el texto: remover espacios y reemplazar coma por punto
+        Dim cleanText As String = text.Trim().Replace(",", ".")
+        
+        If Double.TryParse(cleanText, Globalization.NumberStyles.Any, Globalization.CultureInfo.InvariantCulture, result) Then
+            Return result
+        End If
+        
+        ' Si falla, intentar con Val() como fallback para mantener compatibilidad
+        Return Val(text)
+    End Function
+
+    ''' <summary>
+    ''' Convierte una cadena a Integer de forma segura.
+    ''' Reemplaza la función legacy Val() con manejo de errores apropiado.
+    ''' </summary>
+    Public Shared Function SafeToInteger(ByVal text As String, Optional ByVal defaultValue As Integer = 0) As Integer
+        If String.IsNullOrEmpty(text) Then Return defaultValue
+        
+        Dim result As Integer
+        Dim cleanText As String = text.Trim()
+        
+        If Integer.TryParse(cleanText, result) Then
+            Return result
+        End If
+        
+        ' Intentar como Double y truncar
+        Dim dblResult As Double = SafeToDouble(text)
+        Return CInt(Math.Truncate(dblResult))
+    End Function
+
+    ''' <summary>
+    ''' Convierte una cadena a Short de forma segura.
+    ''' Reemplaza la función legacy Val() con manejo de errores apropiado.
+    ''' </summary>
+    Public Shared Function SafeToShort(ByVal text As String, Optional ByVal defaultValue As Short = 0S) As Short
+        If String.IsNullOrEmpty(text) Then Return defaultValue
+        
+        Dim result As Short
+        Dim cleanText As String = text.Trim()
+        
+        If Short.TryParse(cleanText, result) Then
+            Return result
+        End If
+        
+        ' Intentar como Integer y convertir
+        Dim intResult As Integer = SafeToInteger(text)
+        If intResult >= Short.MinValue AndAlso intResult <= Short.MaxValue Then
+            Return CShort(intResult)
+        End If
+        Return defaultValue
+    End Function
+
+#End Region
+
     Shared Function left(ByVal cadena As String, ByVal largo As Short) As String
         Return Mid(cadena, 1, largo)
     End Function
