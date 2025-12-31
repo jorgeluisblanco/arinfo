@@ -77,16 +77,20 @@ Public Class Info
     End Sub
 
     Private Const myLoadSchema As String = "E:\INFO1.xsd"
-    Private myXmlDataDocument As XmlDataDocument
+    ' Reemplazado XmlDataDocument (obsoleto) por DataSet directo
+    Private mySchemaDataSet As DataSet
 
 
     ' Loads a specified schema into the DataSet
     Public Sub ParseSchema(ByVal schema As String)
         Try
             AppLogger.LogDebug("Leyendo schema: " & schema)
+            If mySchemaDataSet Is Nothing Then
+                mySchemaDataSet = New DataSet()
+            End If
             Using myStreamReader As New StreamReader(schema)
                 Console.WriteLine("Reading Schema file ...")
-                myXmlDataDocument.DataSet.ReadXmlSchema(myStreamReader)
+                mySchemaDataSet.ReadXmlSchema(myStreamReader)
             End Using
             AppLogger.Info("Schema cargado exitosamente")
         Catch e As Exception
@@ -137,23 +141,29 @@ Public Class Info
         Console.WriteLine()
         Console.WriteLine("Table structure")
         Console.WriteLine()
-        Console.WriteLine("Tables count=" & myXmlDataDocument.DataSet.Tables.Count.ToString())
+        
+        If mySchemaDataSet Is Nothing Then
+            Console.WriteLine("No schema loaded.")
+            Return
+        End If
+        
+        Console.WriteLine("Tables count=" & mySchemaDataSet.Tables.Count.ToString())
 
         Dim i, j As Integer
 
-        For i = 0 To (myXmlDataDocument.DataSet.Tables.Count - 1)
+        For i = 0 To (mySchemaDataSet.Tables.Count - 1)
 
-            Console.WriteLine("TableName='" & myXmlDataDocument.DataSet.Tables(i).TableName & "'.")
-            Console.WriteLine("Columns count=" & myXmlDataDocument.DataSet.Tables(i).Columns.Count.ToString())
+            Console.WriteLine("TableName='" & mySchemaDataSet.Tables(i).TableName & "'.")
+            Console.WriteLine("Columns count=" & mySchemaDataSet.Tables(i).Columns.Count.ToString())
            
-            For j = 0 To (myXmlDataDocument.DataSet.Tables(i).Columns.Count - 1)
-                Dim dc As DataColumn = myXmlDataDocument.DataSet.Tables(i).Columns(j)
+            For j = 0 To (mySchemaDataSet.Tables(i).Columns.Count - 1)
+                Dim dc As DataColumn = mySchemaDataSet.Tables(i).Columns(j)
                 Dim props As System.Data.PropertyCollection = dc.ExtendedProperties
                 Console.WriteLine(Strings.Chr(9) & "ColumnName='" & _
-                                  myXmlDataDocument.DataSet.Tables(i).Columns(j).ColumnName & "', type = " & myXmlDataDocument.DataSet.Tables(i).Columns(j).DataType.ToString())
+                                  mySchemaDataSet.Tables(i).Columns(j).ColumnName & "', type = " & mySchemaDataSet.Tables(i).Columns(j).DataType.ToString())
                 For jj = 0 To props.Count - 1
                     Console.WriteLine(Strings.Chr(9) & "ColumnName='" & _
-                                  myXmlDataDocument.DataSet.Tables(i).Columns(j).ColumnName & "   " & props.Keys(jj) & "   " & props.Values(jj))
+                                  mySchemaDataSet.Tables(i).Columns(j).ColumnName & "   " & props.Keys(jj) & "   " & props.Values(jj))
                 Next
                 'Dim extended As DataColumn.ex
             Next
