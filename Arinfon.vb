@@ -162,13 +162,13 @@ Module Arinfon
             TipoDeCampo(IndicedeCampo) = Campo.Numerico
             DeciDeCampo(IndicedeCampo) = Campo.Decimales
             Desde = InStr(Campo.Titulo, "- ")
-            If Desde Then
+            If Desde <> 0 Then
                 Desde = Desde + 2
             Else
                 Desde = 1
             End If
             Hasta = InStr(Campo.Titulo, ":")
-            If Hasta Then
+            If Hasta <> 0 Then
             Else
                 Hasta = Len(Campo.Titulo)
             End If
@@ -329,7 +329,7 @@ Module Arinfon
 
                 Y# = QB.SafeToDouble(B$)
                 If Y# > 0 And Y# <= NroInstruccionesArchivadas Then
-                    B$ = InstruccionesArchivadas(Y#)
+                    B$ = InstruccionesArchivadas(CInt(Y#))
                     Debug.Print(B$)
                 End If
 
@@ -355,13 +355,13 @@ Module Arinfon
                 Debug.Print(C$)
                 VUELTA% = 0
                 Call Deco1()
-                If VUELTA% Then
+                If VUELTA% <> 0 Then
                     repetirArinfo = True ' Equivale a GoTo 50490
                     Exit Do
                 End If
 
                 ConfirmaImpresora()
-                If VUELTA% Then
+                If VUELTA% <> 0 Then
                     repetirArinfo = True ' Equivale a GoTo 50490
                     Exit Do
                 End If
@@ -369,7 +369,7 @@ Module Arinfon
         Loop
         Call Deco2()
         'otro info ? o fin de info
-        If GG% Then
+        If GG% <> 0 Then
             'Print(Pxt, TAB(1), GG.ToString & " Registros ")
         Else
             'Print(Pxt, "No Encontre '" & ClaveBusqueda & "'...")
@@ -493,10 +493,10 @@ Module Arinfon
             Dim fields(60) As String
             Dim Margenes As PageMargins = cr.PrintOptions.PageMargins
             Dim Papelsize As PaperSize = cr.PrintOptions.PaperSize
-            Margenes.topMargin = (0.1 * 1440)
-            Margenes.bottomMargin = (0.1 * 1440)
-            Margenes.leftMargin = (0.1 * 1440)
-            Margenes.rightMargin = (0.1 * 1440)
+            Margenes.topMargin = CInt(0.1 * 1440)
+            Margenes.bottomMargin = CInt(0.1 * 1440)
+            Margenes.leftMargin = CInt(0.1 * 1440)
+            Margenes.rightMargin = CInt(0.1 * 1440)
             Dim PageContentWidth As Integer = 0
             Dim Anchodevuelto As Integer
             Dim MedidaFont As Single
@@ -543,7 +543,7 @@ Module Arinfon
             'MsgBox("Fin " + MedidaFont.ToString + "  " + Anchodevuelto.ToString + "  " + PageContentWidth.ToString)
             Dim Ofset As Integer = 0
             If PageContentWidth - Anchodevuelto > 0 Then
-                Ofset = (PageContentWidth - Anchodevuelto) / 2
+                Ofset = CInt((PageContentWidth - Anchodevuelto) / 2)
             End If
 
             'Do 
@@ -602,10 +602,10 @@ Module Arinfon
             Dim TxtSize As SizeF
             ' las medidas del Cr son en Twips ->  1 inch = 1440 twips
             TMPgfx.PageUnit = GraphicsUnit.Inch
-            Dim pText As String = New String("L", 1)
+            Dim pText As String = New String("L"c, 1)
             Dim PFont As Font = New System.Drawing.Font("Arial", MedidaFont, System.Drawing.FontStyle.Regular)
             TxtSize = TMPgfx.MeasureString(pText, PFont)
-            Dim AnchoSeparador As Integer = TxtSize.Width * 1440
+            Dim AnchoSeparador As Integer = CInt(TxtSize.Width * 1440)
             Dim Ancho As Integer = 0
             Dim Ancholinea As Integer = AnchoSeparador
             Dim Tabs(50) As Integer
@@ -652,9 +652,9 @@ Module Arinfon
             Dim Var As Integer = 0
             For i = 0 To newDataSet.Tables(0).Columns.Count - 1
                 Dim colwork As DataColumn = newDataSet.Tables(0).Columns(i)
-                If colwork.ExtendedProperties.Item("Subtotal") = 1 Then
+                If CInt(colwork.ExtendedProperties.Item("Subtotal")) = 1 Then
                     Var = Var + 1
-                    Dim Dec As Integer = colwork.ExtendedProperties.Item("Decimales")
+                    Dim Dec As Integer = CInt(colwork.ExtendedProperties.Item("Decimales"))
                     Dim FmDisplay As String = "NumberVar x" + Var.ToString + ";" + Chr(13) + Chr(10) + "WhilePrintingRecords;" + Chr(13) + Chr(10) + "Replace(ToText(x" + Var.ToString + ", " + Dec.ToString + "), ',', '.')"
                     Dim FmReset As String = "NumberVar x" + Var.ToString + ";" + Chr(13) + Chr(10) + "WhilePrintingRecords;" + Chr(13) + Chr(10) + "x" + Var.ToString + ":=0;"
                     Dim FmSuma As String = "WhilePrintingRecords;" + Chr(13) + Chr(10) + "If NumericText(Trim(Replace({DataTable1.DataColumn" + i.ToString + "},' ',''))) then " + Chr(13) + Chr(10) + "numbervar x" + Var.ToString + ":= x" + Var.ToString + " + cdbl(Trim(Replace(replace({DataTable1.DataColumn" + i.ToString + "},'.',','),' ',''))) " + Chr(13) + Chr(10) + "Else " + Chr(13) + Chr(10) + "numbervar x" + Var.ToString + ":= x" + Var.ToString + " + 0;"
@@ -704,10 +704,10 @@ Module Arinfon
         Dim TxtSize As SizeF
         ' las medidas del Cr son en Twips ->  1 inch = 1440 twips
         TMPgfx.PageUnit = GraphicsUnit.Inch
-        Dim pText As String = New String("L", 1)
+        Dim pText As String = New String("L"c, 1)
         Dim PFont As Font = New System.Drawing.Font("Arial", MedidaFont, System.Drawing.FontStyle.Regular)
         TxtSize = TMPgfx.MeasureString(pText, PFont)
-        Dim AnchoSeparador As Integer = TxtSize.Width * 1440
+        Dim AnchoSeparador As Integer = CInt(TxtSize.Width * 1440)
         Dim Ancho As Integer = 0
         Dim Ancholinea As Integer = AnchoSeparador
         Dim Tabs(50) As Integer
@@ -762,10 +762,10 @@ Module Arinfon
                     If RepObj.Name = FormulaName Then
                         FldName = CType(Report.ReportDefinition.ReportObjects(RepObj.Name), FieldObject)
                         FldName.ObjectFormat.EnableSuppress = False
-                        FldName.Width = ColWork.ExtendedProperties.Item("Ancho") * AnchoSeparador
+                        FldName.Width = CInt(CInt(ColWork.ExtendedProperties.Item("Ancho")) * AnchoSeparador)
                         FldName.ApplyFont(PFont)
-                        FldName.Left = (ColWork.ExtendedProperties.Item("Tab") * AnchoSeparador) + Ofset
-                        Select Case ColWork.ExtendedProperties.Item("Tipo")
+                        FldName.Left = CInt(CInt(ColWork.ExtendedProperties.Item("Tab")) * AnchoSeparador) + Ofset
+                        Select Case CInt(ColWork.ExtendedProperties.Item("Tipo"))
                             Case 0, 2
                                 FldName.ObjectFormat.HorizontalAlignment = Alignment.LeftAlign
                             Case 1
