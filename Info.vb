@@ -82,20 +82,16 @@ Public Class Info
 
     ' Loads a specified schema into the DataSet
     Public Sub ParseSchema(ByVal schema As String)
-        Dim myStreamReader As StreamReader = Nothing
         Try
             AppLogger.LogDebug("Leyendo schema: " & schema)
-            myStreamReader = New StreamReader(schema)
-            Console.WriteLine("Reading Schema file ...")
-            myXmlDataDocument.DataSet.ReadXmlSchema(myStreamReader)
+            Using myStreamReader As New StreamReader(schema)
+                Console.WriteLine("Reading Schema file ...")
+                myXmlDataDocument.DataSet.ReadXmlSchema(myStreamReader)
+            End Using
             AppLogger.Info("Schema cargado exitosamente")
         Catch e As Exception
             AppLogger.Error(e, "Error al leer schema: " & schema)
             Console.WriteLine("Exception: " & e.ToString())
-        Finally
-            If Not myStreamReader Is Nothing Then
-                myStreamReader.Close()
-            End If
         End Try
     End Sub
 
