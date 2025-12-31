@@ -1,0 +1,35 @@
+1,33
+" 1- Codigo: ",4,1,5,0,0,0
+" 2- Descripcion: ",5,1,32,0,0,0
+" 3- Listados: ",5,54,1,0,0,0
+" 4- Costo U$S: ",6,1,8,1,2,0
+" 5- CostoGtos U$S: ",6,25,8,1,2,0
+" 6- Precio U$S: ",6,54,8,1,2,0
+" 7- Fecha Ult. Actualizacion: ",7,1,8,3,0,0
+" 8- Obs. Lispre : ",8,1,30,0,0,0
+" 9- Existencia inicial : ",9,1,10,1,3,0
+"10- Entradas Acumuladas: ",10,1,10,1,3,0
+"11- Salidas Acumuladas : ",11,1,10,1,3,0
+"12- Existencia Actual  : ",12,1,10,1,3,0
+"13- Fecha Inicio Acumulado: ",12,43,8,0,0,0
+"14- Puro o Compuesto ?: ",13,1,1,0,0,0
+"15- Tipo: ",13,43,1,0,0,0
+"16- Fecha de Costeo: ",14,1,8,3,0,0
+"17- Mano de Obra: ",15,1,9,1,3,0
+"18- Electricidad: ",16,1,9,1,3,0
+"19- Gas: ",16,43,9,1,3,0
+"20- Divisor: ",17,1,9,1,3,0
+"21- Factor1: ",17,43,9,1,3,0
+"22- Factor2: ",18,1,9,1,3,0
+"23- Factor3: ",18,43,9,1,3,0
+"24- Proveedor 1: ",19,1,60,0,0,0
+"25- Proveedor 2: ",20,1,60,0,0,0
+"26- Punto de Pedido: ",21,1,10,1,2,0
+"27- Concentracion: ",22,1,7,0,0,0
+"28- C.PuroU$S: ",22,30,8,1,2,0
+"29- V.U.Agreg: ",22,55,8,1,2,0
+"30- FiltroLista: ",23,1,1,0,0,0
+"31- Densidad: ",23,30,5,1,3,0
+"32- Dummy: ",23,1,19,0,0,0
+"33- Dummy: ",23,1,1,0,0,0
+

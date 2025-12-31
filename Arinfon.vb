@@ -207,33 +207,49 @@ Module Arinfon
         Info.CBox2.Items.Clear()
         Archivo = Arbtr(Ar).Archivo
         NombreArchivo = Arbtr(Ar).Tabla
-        Dim Filenum As Integer
-        Dim HuboExcept As Boolean = False
         ArchivodeInstrucciones = Archivo & ".inf"
-        Filenum = FreeFile()
-OTROAR:
-        FileClose(Filenum)
-        Try
-            FileOpen(Filenum, ArchivodeInstrucciones, Microsoft.VisualBasic.OpenMode.Input, , OpenShare.Shared)
-        Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly)
-            HuboExcept = True
-        Finally
-            If HuboExcept Then
-                FileClose(Filenum)
-                FileOpen(Filenum, ArchivodeInstrucciones, Microsoft.VisualBasic.OpenMode.Output, , OpenShare.Shared)
+
+        If Not System.IO.File.Exists(ArchivodeInstrucciones) Then
+            ' Si no existe, lo creamos con 0 instrucciones
+            Try
+                System.IO.File.WriteAllText(ArchivodeInstrucciones, "0" & Environment.NewLine, System.Text.Encoding.Default)
                 NroInstruccionesArchivadas = 0
-                Print(Filenum, NroInstruccionesArchivadas)
-                FileClose(Filenum)
-                FileOpen(Filenum, ArchivodeInstrucciones, Microsoft.VisualBasic.OpenMode.Input, , OpenShare.Shared)
-            End If
+                AppLogger.LogDebug("Creado archivo de instrucciones vacío: {0}", ArchivodeInstrucciones)
+            Catch ex As Exception
+                AppLogger.LogError("No se pudo crear el archivo de instrucciones {0}: {1}", ArchivodeInstrucciones, ex.Message)
+            End Try
+        End If
+
+        Try
+            Using parser As New Microsoft.VisualBasic.FileIO.TextFieldParser(ArchivodeInstrucciones, System.Text.Encoding.Default)
+                parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited
+                parser.SetDelimiters(",")
+                parser.HasFieldsEnclosedInQuotes = True
+
+                If Not parser.EndOfData Then
+                    Dim firstLine As String() = parser.ReadFields()
+                    If firstLine IsNot Nothing AndAlso firstLine.Length > 0 Then
+                        NroInstruccionesArchivadas = CShort(Val(firstLine(0)))
+                    End If
+                End If
+
+                Dim i As Integer = 1
+                While Not parser.EndOfData AndAlso i <= NroInstruccionesArchivadas
+                    Dim fields As String() = parser.ReadFields()
+                    If fields IsNot Nothing AndAlso fields.Length > 0 Then
+                        InstruccionesArchivadas(i) = fields(0)
+                        Info.CBox2.Items.Add(fields(0))
+                    End If
+                    i += 1
+                End While
+            End Using
+            
+            AppLogger.LogDebug("Instrucciones cargadas: {0} de {1}", Info.CBox2.Items.Count, ArchivodeInstrucciones)
+
+        Catch ex As Exception
+            AppLogger.LogError("Error al leer instrucciones de {0}: {1}", ArchivodeInstrucciones, ex.Message)
+            MsgBox("Error al cargar informes guardados: " & ex.Message, MsgBoxStyle.Exclamation)
         End Try
-        Input(Filenum, NroInstruccionesArchivadas)
-        For IndicedeCampo = 1 To NroInstruccionesArchivadas
-            Input(Filenum, InstruccionesArchivadas(IndicedeCampo))
-            Info.CBox2.Items.Add(InstruccionesArchivadas(IndicedeCampo))
-        Next IndicedeCampo
-        FileClose(Filenum)
     End Sub
 
 
@@ -300,7 +316,9 @@ OTROAR:
                     Status = Arbtr(Ar).CallBtrv(12, Keyval, Keynum)
                     If (Status <> 0) And (Status <> 6) Then
                         Debug.Print("STAT: " & Status)
-                        Stop
+                        AppLogger.LogError("Error inesperado al cambiar clave Btrieve. Status: {0}, Keynum: {1}", Status, Keynum)
+                        MsgBox("Error al cambiar clave: " & Status.ToString(), MsgBoxStyle.Exclamation)
+                        Keynum = 0 ' Reset a la clave por defecto
                     End If
                     If Status = 6 Then
                         Keynum = 0
@@ -1842,28 +1860,32 @@ OTROAR:
 
     Sub GrabaArchivoListados()
         'graba archivo de listados
-50230:
-        Dim Filenum As Integer
-        Dim HuboExcept As Boolean = False
-        Filenum = FreeFile()
-        FileClose(Filenum)
+        
+        If String.IsNullOrEmpty(ArchivodeInstrucciones) Then
+            AppLogger.LogError("No se definió el archivo de instrucciones.")
+            Return
+        End If
+
         Try
-            FileOpen(Filenum, ArchivodeInstrucciones, Microsoft.VisualBasic.OpenMode.Output, , OpenShare.Shared)
+            Using writer As New System.IO.StreamWriter(ArchivodeInstrucciones, False, System.Text.Encoding.Default)
+                Info.CBox2.Items.Clear()
+                
+                ' Escribimos el número de instrucciones
+                writer.WriteLine(NroInstruccionesArchivadas)
+                
+                For i As Integer = 1 To NroInstruccionesArchivadas
+                    Dim instruccion As String = InstruccionesArchivadas(i).ToString().Trim()
+                    writer.WriteLine("""" & instruccion & """") ' Formato compatible con Input/Read (envuelto en comillas)
+                    Info.CBox2.Items.Add(instruccion)
+                Next
+            End Using
+            
+            AppLogger.LogOperation("Grabación de listados", "Archivo: {0}, Instrucciones: {1}", ArchivodeInstrucciones, NroInstruccionesArchivadas)
+
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly)
-            HuboExcept = True
-        Finally
-            If HuboExcept Then
-                Stop
-            End If
+            AppLogger.LogError("Error al grabar archivo de listados {0}: {1}", ArchivodeInstrucciones, ex.Message)
+            MsgBox("Error al grabar listados: " & ex.Message, MsgBoxStyle.Critical)
         End Try
-        Info.CBox2.Items.Clear()
-        WriteLine(Filenum, NroInstruccionesArchivadas)
-        For IndicedeCampo = 1 To NroInstruccionesArchivadas
-            WriteLine(Filenum, InstruccionesArchivadas(IndicedeCampo).ToString.Trim)
-            Info.CBox2.Items.Add(InstruccionesArchivadas(IndicedeCampo).ToString.Trim)
-        Next IndicedeCampo
-        FileClose(Filenum)
     End Sub
 
     Dim algo As Integer

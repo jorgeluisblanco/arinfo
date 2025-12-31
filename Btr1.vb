@@ -79,47 +79,65 @@ Public Class Btr
     End Function
 
     Sub BtAbrePrm()
-        Dim TempCampo As ClsCampo
-        Dim Filenum As Integer
-        Dim Dummy As Integer
-        Dim HuboExcept As Boolean = False
-        Dim File As String = Me.Archivo & ".prm"
+        Dim pathPrm As String = Me.Archivo & ".prm"
+        
+        If Not System.IO.File.Exists(pathPrm) Then
+            AppLogger.LogWarn("No se encontró el archivo PRM en: {0}. Intentando cargar esquema vacío.", pathPrm)
+            Return
+        End If
 
-        Filenum = FreeFile()
-        FileClose(Filenum)
         Try
-            FileOpen(Filenum, File, Microsoft.VisualBasic.OpenMode.Input, , OpenShare.Shared)
+            ' Usamos TextFieldParser para manejar correctamente los campos delimitados por comas y comillas
+            Using parser As New Microsoft.VisualBasic.FileIO.TextFieldParser(pathPrm)
+                parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited
+                parser.SetDelimiters(",")
+                parser.HasFieldsEnclosedInQuotes = True
+
+                If Not parser.EndOfData Then
+                    Dim firstLine As String() = parser.ReadFields()
+                    If firstLine IsNot Nothing AndAlso firstLine.Length >= 2 Then
+                        ' firstLine(0) es Dummy, firstLine(1) es NumerodeCampos
+                        NumerodeCampos = CInt(Val(firstLine(1)))
+                    End If
+                End If
+
+                NumerodeCamposVisibles = 0
+                Campos.Clear()
+                Dim LargodeRegistro As Short = 0
+
+                Dim i As Integer = 1
+                While Not parser.EndOfData AndAlso i <= NumerodeCampos
+                    Dim line As String() = parser.ReadFields()
+                    If line IsNot Nothing AndAlso line.Length >= 6 Then
+                        Dim TempCampo As New ClsCampo()
+                        TempCampo.Ofset = CShort(1 + LargodeRegistro)
+                        TempCampo.CampoNumero = CShort(i)
+                        
+                        TempCampo.Titulo = line(0).Trim()
+                        TempCampo.Fila = CShort(Val(line(1)))
+                        TempCampo.Columna = CShort(Val(line(2)))
+                        TempCampo.Ancho = CShort(Val(line(3)))
+                        TempCampo.Numerico = CShort(Val(line(4)))
+                        TempCampo.Decimales = CShort(Val(line(5)))
+                        ' line(6) sería el Dummy si existiera en esa línea
+
+                        LargodeRegistro = CShort(LargodeRegistro + TempCampo.Ancho)
+                        
+                        If TempCampo.Ancho > 0 Then
+                            NumerodeCamposVisibles += 1
+                            Campos.Add(TempCampo)
+                        End If
+                    End If
+                    i += 1
+                End While
+            End Using
+            
+            AppLogger.LogDebug("Archivo PRM cargado exitosamente: {0}. Campos: {1}", pathPrm, NumerodeCampos)
+
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly)
-            HuboExcept = True
-        Finally
-            If HuboExcept Then
-                Stop
-            End If
+            AppLogger.LogError("Error al leer el archivo PRM {0}: {1}", pathPrm, ex.Message)
+            MsgBox("Error al leer configuración: " & ex.Message, MsgBoxStyle.Critical)
         End Try
-        NumerodeCamposVisibles = 0
-        Input(Filenum, Dummy)
-        Input(Filenum, NumerodeCampos)
-        Dim LargodeRegistro As Short = 0
-        Dim IndicedeCampo As Short
-        For IndicedeCampo = 1 To NumerodeCampos
-            TempCampo = New ClsCampo()
-            TempCampo.Ofset = 1 + LargodeRegistro
-            TempCampo.CampoNumero = IndicedeCampo
-            Input(Filenum, TempCampo.Titulo)
-            Input(Filenum, TempCampo.Fila)
-            Input(Filenum, TempCampo.Columna)
-            Input(Filenum, TempCampo.Ancho)
-            Input(Filenum, TempCampo.Numerico)
-            Input(Filenum, TempCampo.Decimales)
-            Input(Filenum, Dummy)
-            LargodeRegistro = LargodeRegistro + TempCampo.Ancho
-            If TempCampo.Ancho > 0 Then
-                NumerodeCamposVisibles = NumerodeCamposVisibles + 1
-                Campos.Add(TempCampo)
-            End If
-        Next IndicedeCampo
-        FileClose(Filenum)
     End Sub
 
     Property Campo(ByVal iT As Short) As String
@@ -176,7 +194,9 @@ Public Class Btr
             Case 7
                 Vbtrv1.Seek(Comparacion, ValoresClave(1), ValoresClave(2), ValoresClave(3), ValoresClave(4), ValoresClave(5), ValoresClave(6), ValoresClave(6))
             Case Else
-                Stop
+                ' OpCode no soportado: más de 7 segmentos de clave
+                AppLogger.LogError("Bseek: Cantidad de segmentos no soportada: {0}", CantidadDeSegmentos)
+                Return 22 ' Error: operación no soportada
         End Select
         Dim Status As Integer = Vbtrv1.LastError
         Return Status
@@ -258,7 +278,9 @@ Public Class Btr
                             OpCode = Atras
                             continueLoop = True
                         Case Else
-                            Stop
+                            ' OpCode no esperado en el contexto de filtrado
+                            AppLogger.LogError("CallBtrv: OpCode no válido para filtrado: {0}", OpCode)
+                            Status = 999 ' Error: operación no válida
                     End Select
                 ElseIf Habilitacion = 2 Then
                     Status = 9
@@ -338,7 +360,9 @@ Public Class Btr
                             OpCode = Atras
                             continueLoop = True
                         Case Else
-                            Stop
+                            ' OpCode no esperado en el contexto de filtrado
+                            AppLogger.LogError("CallBtrv: OpCode no válido para filtrado: {0}", OpCode)
+                            Status = 999 ' Error: operación no válida
                     End Select
                 ElseIf Habilitacion = 2 Then
                     Status = 9
@@ -419,7 +443,9 @@ Public Class Btr
                             OpCode = Atras
                             continueLoop = True
                         Case Else
-                            Stop
+                            ' OpCode no esperado en el contexto de filtrado
+                            AppLogger.LogError("CallBtrv: OpCode no válido para filtrado: {0}", OpCode)
+                            Status = 999 ' Error: operación no válida
                     End Select
                 ElseIf Habilitacion = 2 Then
                     Status = 9
