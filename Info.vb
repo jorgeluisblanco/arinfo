@@ -1,4 +1,6 @@
-﻿Imports Infragistics.Shared
+﻿Option Strict On
+Option Explicit On
+Imports Infragistics.Shared
 Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
 Imports Infragistics.Win.UltraWinGrid.UltraGridAction
@@ -163,7 +165,7 @@ Public Class Info
                                   mySchemaDataSet.Tables(i).Columns(j).ColumnName & "', type = " & mySchemaDataSet.Tables(i).Columns(j).DataType.ToString())
                 For jj = 0 To props.Count - 1
                     Console.WriteLine(Strings.Chr(9) & "ColumnName='" & _
-                                  mySchemaDataSet.Tables(i).Columns(j).ColumnName & "   " & props.Keys(jj) & "   " & props.Values(jj))
+                                  mySchemaDataSet.Tables(i).Columns(j).ColumnName & "   " & CStr(props.Keys(jj)) & "   " & CStr(props.Values(jj)))
                 Next
                 'Dim extended As DataColumn.ex
             Next
@@ -254,10 +256,10 @@ Public Class Info
     Private Sub BtnFin_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnFin.Click
         Dim Msg As String = "Seguro que queres salir ...? ( S o N ) "
         Dim Title As String
-        Dim Buttons As Integer
+        Dim Buttons As MsgBoxStyle
         Dim Ans As MsgBoxResult
         Title = "Fin de Programa"
-        Buttons = MsgBoxStyle.YesNoCancel + MsgBoxStyle.DefaultButton2
+        Buttons = MsgBoxStyle.YesNoCancel Or MsgBoxStyle.DefaultButton2
         Ans = MsgBox(Msg, Buttons, Title)
         If Ans = MsgBoxResult.Yes Then
             AppLogger.Info("Usuario cerró el formulario Info")
@@ -282,7 +284,7 @@ Public Class Info
     End Sub
 
     Private Sub cbox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbox1.SelectedIndexChanged
-        TextBox2.Text = TextBox2.Text + " " + cbox1.SelectedItem
+        TextBox2.Text = TextBox2.Text & " " & CStr(cbox1.SelectedItem)
         cbox1.SelectedItems.Clear()
     End Sub
 
@@ -304,13 +306,13 @@ Public Class Info
     End Sub
 
     Private Sub CBox2_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CBox2.SelectedIndexChanged
-        TextBox2.Text = TextBox2.Text + " " + CBox2.SelectedItem
+        TextBox2.Text = TextBox2.Text & " " & CStr(CBox2.SelectedItem)
         CBox2.SelectedItems.Clear()
     End Sub
 
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnArchivos.Click
         'MenuDeArchivos()
-        Dim ArchivoElegido As String = Cmbox.SelectedItem
+        Dim ArchivoElegido As String = CStr(Cmbox.SelectedItem)
         If ArchivoElegido.Trim <> "" Then
             Dim Parchivo As New clsParametrosdeArchivo
             With Parchivo
@@ -414,8 +416,8 @@ Public Class Info
         UltraGrid1.DisplayLayout.Bands(0).Columns(0).Hidden = True
         'inicializa()
 
-        UltraGrid1.DisplayLayout.Override.AllowAddNew = DefaultableBoolean.True
-        UltraGrid1.DisplayLayout.Bands(0).Override.AllowAddNew = DefaultableBoolean.True
+        UltraGrid1.DisplayLayout.Override.AllowAddNew = AllowAddNew.TemplateOnTop
+        UltraGrid1.DisplayLayout.Bands(0).Override.AllowAddNew = AllowAddNew.TemplateOnTop
         UltraGrid1.DisplayLayout.Override.AllowUpdate = DefaultableBoolean.True
         UltraGrid1.DisplayLayout.Bands(0).Override.AllowUpdate = DefaultableBoolean.True
         UltraGrid1.DisplayLayout.Override.AllowDelete = DefaultableBoolean.True
@@ -469,7 +471,7 @@ Public Class Info
                     If Fila < dt.Rows.Count Then
                         Dim dtr As DataRow = dt.Rows(Fila)
                         If Trim(dt.Rows(Fila)("Bookmark").ToString()) <> "" Then
-                            x.Vbtrv1.BtrievePosition = dt.Rows(Fila)("Bookmark")
+                            x.Vbtrv1.BtrievePosition = CInt(dt.Rows(Fila)("Bookmark"))
                             x.Vbtrv1.Delete()
                         End If
                         dt.Rows.Remove(dtr)
@@ -543,7 +545,7 @@ Public Class Info
         mouseupUIElement = UltraGrid1.DisplayLayout.UIElement.ElementFromPoint(New Point(e.X, e.Y))
         If Not mouseupUIElement Is Nothing Then
             ' retrieve the Cell from the UIElement
-            mouseupCell = mouseupUIElement.GetContext(GetType(Infragistics.Win.UltraWinGrid.UltraGridCell))
+            mouseupCell = DirectCast(mouseupUIElement.GetContext(GetType(Infragistics.Win.UltraWinGrid.UltraGridCell)), UltraGridCell)
             If Not mouseupCell Is Nothing Then
                 If mouseupCell.IsActiveCell Then
                     UltraGrid1.ActiveCell = mouseupCell
@@ -586,7 +588,7 @@ Public Class Info
             AppLogger.LogOperation("UPDATE", "Actualizando " & rowcount.ToString() & " registros")
             For i As Integer = 0 To dt.Rows.Count - 1
                 AppLogger.LogDebug("Bookmark: " & dt.Rows(i)("Bookmark").ToString())
-                x.Vbtrv1.BtrievePosition = dt.Rows(i)("Bookmark")
+                x.Vbtrv1.BtrievePosition = CInt(dt.Rows(i)("Bookmark"))
                 x.Vbtrv1.Edit()
                 For j As Integer = 1 To dt.Columns.Count - 1
                     x.Vbtrv1.Field(P(j) - 1) = dt.Rows(i)((j)).ToString()
@@ -924,7 +926,7 @@ Public Class Info
     End Sub
 
     Private Sub Cmbox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cmbox.SelectedIndexChanged
-        Dim ArchivoElegido As String = Cmbox.SelectedItem
+        Dim ArchivoElegido As String = CStr(Cmbox.SelectedItem)
         Ejecuta(ArchivoElegido)
     End Sub
 
