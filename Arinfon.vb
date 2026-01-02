@@ -62,18 +62,18 @@ Module Arinfon
     Dim TabCentrado As Boolean
     Dim FechaEmision As String
     Dim TituloInforme As String
-    Dim BB$
-    Dim RTEM$
+    Dim BB As String
+    Dim RTEM As String
     Dim NroPagina As Integer
-    Dim T1%
-    Dim N%
+    Dim T1 As Integer
+    Dim N As Integer
     Dim M As Integer ' indice de campo del archivo
-    Dim YM#
+    Dim YM As Double
     Dim Ar As Integer
     Dim ultimotab As Integer
 
     Dim LargoLinea As Integer
-    Dim T%
+    Dim T As Integer
     Dim NroLinea As Integer
     Dim FlgSubrayado As Integer = 0
     Dim FlgExcell As Integer = 0
@@ -82,43 +82,43 @@ Module Arinfon
     Dim FlgImpresion As Integer
     Dim FlgOrdenAlfa As Integer
     Dim FlgOrdenNume As Integer
-    Dim PTR%
-    Dim LC%
+    Dim PTR As Integer
+    Dim LC As Integer
     Public B As String = "ALGO "
     Dim A As String
-    Dim X7%
-    Dim YSS#
+    Dim X7 As Integer
+    Dim YSS As Double
     Dim FlagSubTotal As Integer
 
-    Dim YS#
-    Dim AL$
+    Dim YS As Double
+    Dim AL As String
     Dim SeparadorNumerico As String
-    Dim DD$
+    Dim DD As String
 
     Dim Nul As String = Chr(0)
     Dim KF As Integer
-    Dim Y#
-    Dim VUELTA%
-    Dim GG%
+    Dim Y As Double
+    Dim VUELTA As Integer
+    Dim GG As Integer
 
-    Dim RR%
-    Dim AAA$
-    Dim L%
-    Dim ZM%
+    Dim RR As Integer
+    Dim AAA As String
+    Dim L As Integer
+    Dim ZM As Integer
     Dim ZN As Double
-    Dim IX%
-    Dim ZX%
+    Dim IX As Integer
+    Dim ZX As Integer
     Dim HH As Integer
     Dim OrdenxCampo As Integer
-    Dim FA%
+    Dim FA As Integer
     Dim LargoCampoOrden As Integer
     Dim DeciCampoOrden As Integer
 
-    Dim EE$
-    Dim E$
+    Dim EE As String
+    Dim E As String
 
     Dim Geti As Integer = 0
-    Dim YA%
+    Dim YA As Integer
     Dim DS As String
 
 
@@ -132,19 +132,19 @@ Module Arinfon
     Dim DeciDeCampo(60) As Integer
     Dim SubtDeCampo(60) As Integer
     Dim InstruccionesArchivadas(10) As String
-    Dim FLG%(9, 3)
-    Dim CL$(9)
-    Dim G%(60)
-    Dim P%(60)
-    Dim Q%(60)
-    Dim R%(60)
-    Dim COLU%(60)
-    Dim ASIGX%(60)
-    Dim Z#(60)
-    Dim ZZ#(60)
-    Dim ZZA$(60)
-    Dim SCLA%(60)
-    Dim SCAM%(60)
+    Dim FLG(9, 3) As Integer
+    Dim CL(9) As String
+    Dim G(60) As Integer
+    Dim P(60) As Integer
+    Dim Q(60) As Integer
+    Dim R(60) As Integer
+    Dim COLU(60) As Integer
+    Dim ASIGX(60) As Integer
+    Dim Z(60) As Double
+    Dim ZZ(60) As Double
+    Dim ZZA(60) As String
+    Dim SCLA(60) As Integer
+    Dim SCAM(60) As Integer
 
     Dim ArraySort As New List(Of String)
     Dim porXML As Integer
@@ -259,11 +259,11 @@ Module Arinfon
         Info.TextBox1.Text = ""
         Ar = ARx
         ' ejemplo de orden directa
-        'B$ = "ORDEN POR LETRA CODI"
+        'B = "ORDEN POR LETRA CODI"
         'Call Deco1()
         'If FlgImpresion Then
         TituloInforme = "TITULO"
-        Y# = 45
+        Y = 45
         Call Impresora()
         'End If
         'Call Deco2()
@@ -274,14 +274,14 @@ Module Arinfon
         Tiq(4) = "Dale de nuevo ..."
 
 
-        Dim F%
-        Dim FE%
+        Dim F As Integer
+        Dim FE As Integer
 
 
-        Dim M$
-        Dim ARRI%
-        Dim VARI$ = ""
-        Dim C$
+        Dim M As String
+        Dim ARRI As Integer
+        Dim VARI As String = ""
+        Dim C As String
         If accion = 0 Then
             Asignavariables()
             Exit Sub
@@ -292,9 +292,9 @@ Module Arinfon
 
             ' --- 50490: Mostrar informes guardados ---
             KF = 0
-            F% = 1
-            AppLogger.LogDebug("Mostrando título: {0}", Tiq$(F%))
-            FE% = F%
+            F = 1
+            AppLogger.LogDebug("Mostrando título: {0}", Tiq$(F))
+            FE = F
             Dim IndiceInstruccion As Integer
             For IndiceInstruccion = 1 To NroInstruccionesArchivadas
                 AppLogger.LogDebug("Instrucción {0}: {1}", IndiceInstruccion, InstruccionesArchivadas(IndiceInstruccion))
@@ -305,15 +305,15 @@ Module Arinfon
                 leerComando = False ' Por defecto salimos de la lectura del comando
 
                 ' --- 50511: Ingreso de informe ---
-                M$ = "Ingresa el informe ...    [F1]- Campos  [F10]- Abandona  [F6]Cambia clave(" + Str$(Keynum%) + ")"
-                B$ = Info.TextBox2.Text ' "IMPRIMI ORDEN CODIGO RAZON SOCIAL 'CONS' INVERS"
+                M = "Ingresa el informe ...    [F1]- Campos  [F10]- Abandona  [F6]Cambia clave(" + Str$(KeynuM) + ")"
+                B = Info.TextBox2.Text ' "IMPRIMI ORDEN CODIGO RAZON SOCIAL 'CONS' INVERS"
                 
-                If ARRI% = 20 Then
+                If ARRI = 20 Then
                     Exit Sub
                 End If
 
                 ' Cambio de clave
-                If ARRI% = 16 Then
+                If ARRI = 16 Then
                     Keynum = Keynum + 1
                     Status = Arbtr(Ar).CallBtrv(12, Keyval, Keynum)
                     If (Status <> 0) And (Status <> 6) Then
@@ -329,15 +329,15 @@ Module Arinfon
                     Continue Do
                 End If
 
-                Y# = QB.SafeToDouble(B$)
-                If Y# > 0 And Y# <= NroInstruccionesArchivadas Then
-                    B$ = InstruccionesArchivadas(CInt(Y#))
-                    AppLogger.LogDebug("Instruccion cargada: {0}", B$)
+                Y = QB.SafeToDouble(B)
+                If Y > 0 And Y <= NroInstruccionesArchivadas Then
+                    B = InstruccionesArchivadas(CInt(Y))
+                    AppLogger.LogDebug("Instruccion cargada: {0}", B)
                 End If
 
-                If Y# < 0 Then
+                If Y < 0 Then
                     ' borra instruccion
-                    For IndiceInstruccion = (CInt(Y#) * -1) To NroInstruccionesArchivadas
+                    For IndiceInstruccion = (CInt(Y) * -1) To NroInstruccionesArchivadas
                         InstruccionesArchivadas(IndiceInstruccion) = InstruccionesArchivadas(IndiceInstruccion + 1)
                     Next
                     NroInstruccionesArchivadas = NroInstruccionesArchivadas - 1
@@ -345,25 +345,25 @@ Module Arinfon
                     Exit Do
                 End If
 
-                If qb4.Left(B$, 4) = "GRAB" Then
-                    C$ = "-=< Grabando >=-"  'graba en secuencial
+                If qb4.Left(B, 4) = "GRAB" Then
+                    C = "-=< Grabando >=-"  'graba en secuencial
                     AppLogger.LogDebug("Grabando archivo de listados")
                     GrabaArchivoListados()
                     repetirArinfo = True ' Equivale a GoTo 50490
                     Exit Do
                 End If
 
-                C$ = " sale ..!"
+                C = " sale ..!"
                 AppLogger.LogDebug("Saliendo del proceso de informe")
-                VUELTA% = 0
+                VUELTA = 0
                 Call Deco1()
-                If VUELTA% <> 0 Then
+                If VUELTA <> 0 Then
                     repetirArinfo = True ' Equivale a GoTo 50490
                     Exit Do
                 End If
 
                 ConfirmaImpresora()
-                If VUELTA% <> 0 Then
+                If VUELTA <> 0 Then
                     repetirArinfo = True ' Equivale a GoTo 50490
                     Exit Do
                 End If
@@ -371,7 +371,7 @@ Module Arinfon
         Loop
         Call Deco2()
         'otro info ? o fin de info
-        If GG% <> 0 Then
+        If GG <> 0 Then
             'Print(Pxt, TAB(1), GG.ToString & " Registros ")
         Else
             'Print(Pxt, "No Encontre '" & ClaveBusqueda & "'...")
@@ -434,8 +434,8 @@ Module Arinfon
             'Next
             Info.UltraGrid1.DataSource = newDataSet.Tables(0)
             For i = 1 To newDataSet.Tables(0).Columns.Count - 1
-                'MsgBox(P%(i))
-                'Info.P(i) = P%(i)
+                'MsgBox(P(i))
+                'Info.P(i) = P(i)
             Next
             'newDataSet.Tables(0).Columns(1).MaxLength = 3
 
@@ -695,7 +695,7 @@ Module Arinfon
         'MsgBox("Otro Informe")
         Info.TabControl1.SelectedIndex = 2
 
-        'Simplificado: Exit Sub directo ya que RR% siempre es 0\n        Exit Sub
+        'Simplificado: Exit Sub directo ya que RR siempre es 0\n        Exit Sub
     End Sub
     Function VerificaSiEntra(ByVal Cr As ReportDocument, ByVal MedidaFont As Single) As Integer
         Dim MyText As TextObject
@@ -977,22 +977,22 @@ Module Arinfon
     Sub IniciaOrden()
         ' Inicio del proceso de ordenamiento
         AppLogger.LogDebug("Iniciando lectura de datos para ordenamiento")
-        AAA$ = ""
-        L% = 0
+        AAA = ""
+        L = 0
         ZM = 0
         ZX = CInt(0.1)
         ZN = 1
         FichaPrimera()
         If TipoDeCampo(OrdenxCampo) = 0 Then
-            FA% = 1 'ALFA
+            FA = 1 'ALFA
         Else
-            FA% = 0 ' testea el campo para ver si es numerico
+            FA = 0 ' testea el campo para ver si es numerico
         End If
         If FlgOrdenAlfa <> 0 Then
-            FA% = 1 ' obligo a que los campos numericos se lean alfabeticos
+            FA = 1 ' obligo a que los campos numericos se lean alfabeticos
         End If
         If FlgOrdenNume <> 0 Then
-            FA% = 0 ' 
+            FA = 0 ' 
         End If
         If FA = 1 Then
             LargoCampoOrden = AnchoDeCampo(OrdenxCampo)
@@ -1019,7 +1019,7 @@ Module Arinfon
 
     Sub LeeOrdena()
         IndiceOrden = IndiceOrden + 1
-        If FA% = 0 Then
+        If FA = 0 Then
             YA = CInt(QB.SafeToDouble(Arbtr(Ar).Campo(CShort(OrdenxCampo))))
             Dim largoTemp As Double = CDbl(LargoCampoOrden)
             Dim deciTemp As Double = CDbl(DeciCampoOrden)
@@ -1029,11 +1029,11 @@ Module Arinfon
         End If
         ArraySort.Add(DD.PadRight(LargoCampoOrden) + Arbtr(Ar).Vbtrv1.BtrievePosition.ToString)
 
-        DD$ = Arbtr(Ar).Campo(1)
+        DD = Arbtr(Ar).Campo(1)
         If TipoDeCampo(1) = 3 Then
-            DD$ = XFNINV$(DD$)
+            DD = XFNINV(DD)
         End If
-        AppLogger.LogDebug("Campo leído: {0}", DD$)
+        AppLogger.LogDebug("Campo leído: {0}", DD)
     End Sub
 
     Sub Swap(ByRef a As Object, ByRef b As Object)
@@ -1058,90 +1058,90 @@ Module Arinfon
         Dim IndH As Integer
         If FlgSubrayado <> 0 Then ' agregue para subrayar
             NroLinea = NroLinea + 1
-            A$ = Space(LargoLinea) 'String(LargoLinea, "-")
-            T% = 0
+            A = Space(LargoLinea) 'String(LargoLinea, "-")
+            T = 0
             PrintDeCampo()
         End If
         Call SigoInforme()
         If FlgEdicion <> 0 Then
-            PTR% = PTR% + 1
-            PtrEdicion(PTR%) = CInt(Arbtr(Ar).Vbtrv1.BtrievePosition)
+            PTR = PTR + 1
+            PtrEdicion(PTR) = CInt(Arbtr(Ar).Vbtrv1.BtrievePosition)
         End If
-        Y# = 0
-        'A$ = "    ": RSET A$ = mid(STR$(K%), 2): T% = 0: PrintDeCampo
+        Y = 0
+        'A = "    ": RSET A = mid(STR$(K%), 2): T = 0: PrintDeCampo
         For IndH = 1 To QQ ' cantidad de campos del informe
-            M% = P%(IndH) 'indice del campo en el archivos
-            T% = Q%(IndH) ' tabulador del campo en el informe
-            If ZZ#(IndH) <> 0 Then
-                YM# = ZZ#(IndH)
+            M = P(IndH) 'indice del campo en el archivos
+            T = Q(IndH) ' tabulador del campo en el informe
+            If ZZ(IndH) <> 0 Then
+                YM = ZZ(IndH)
             Else
-                'If TipoDeCampo(M%) Then
-                YM# = QB.SafeToDouble(Arbtr(Ar).Campo(CShort(M%)))
+                'If TipoDeCampo(M) Then
+                YM = QB.SafeToDouble(Arbtr(Ar).Campo(CShort(M)))
                 'End If
             End If
-            Select Case R%(IndH) ' operador
+            Select Case R(IndH) ' operador
                 Case 1
-                    Y# = Y# + YM#
+                    Y = Y + YM
                 Case 2
-                    Y# = Y# - YM#
+                    Y = Y - YM
                 Case 3
-                    Y# = Y# * YM#
+                    Y = Y * YM
                 Case 4
-                    Y# = Y# / YM#
+                    Y = Y / YM
                 Case 5
-                    Y# = Y# + Y# * YM# / 100
+                    Y = Y + Y * YM / 100
                 Case 6
-                    'Y# = SQR(ABS(Y#))
+                    'Y = SQR(ABS(Y))
                 Case 7 ' cambio o SUSTITUCION?
-                    If SCAM%(IndH) <> 0 Then
-                        E$ = Arbtr(Ar).Campo(CShort(SCAM%(IndH))) ' por campo
-                    ElseIf SCLA%(IndH) <> 0 Then
-                        E$ = ZZA$(IndH) ' por clave
+                    If SCAM(IndH) <> 0 Then
+                        E = Arbtr(Ar).Campo(CShort(SCAM(IndH))) ' por campo
+                    ElseIf SCLA(IndH) <> 0 Then
+                        E = ZZA(IndH) ' por clave
                     Else
-                        E$ = Str$(Int(Y# * 100 + 0.5))
-                        E$ = qb4.Left(E$, Len(E$) - 2) + "." + qb4.Right(E$, 2)
+                        E = Str$(Int(Y * 100 + 0.5))
+                        E = qb4.Left(E, Len(E) - 2) + "." + qb4.Right(E, 2)
                     End If
-                    DD$ = E$
-                    If TipoDeCampo(M%) = 3 Then
-                        DD$ = XFNINV$(DD$) ' fecha
+                    DD = E
+                    If TipoDeCampo(M) = 3 Then
+                        DD = XFNINV(DD) ' fecha
                     End If
-                    If Y# <> 0 Then
-                        Arbtr(Ar).Campo(CShort(M%)) = DD$
+                    If Y <> 0 Then
+                        Arbtr(Ar).Campo(CShort(M)) = DD
                     Else
-                        Arbtr(Ar).Campo(CShort(M%)) = DD$
+                        Arbtr(Ar).Campo(CShort(M)) = DD
                     End If
                     Status = Arbtr(Ar).CallBtrv(3, Keyval, Keynum)
                     If Status <> 0 Then
                         AppLogger.LogWarn("Error en CallBtrv - Status: {0}", Status)
                     End If
-                    Y# = 0.0#
+                    Y = 0.0#
                 Case Else
             End Select
             If FlagSubTotal <> 0 And IndH = 1 Then
-                If AAA$ = Arbtr(Ar).Campo(CShort(M%)) Then
-                    A$ = Separador + Space(AnchoDeCampo(M%))
-                    FS% = 1
+                If AAA = Arbtr(Ar).Campo(CShort(M)) Then
+                    A = Separador + Space(AnchoDeCampo(M))
+                    FS = 1
                 Else
-                    AAA$ = Arbtr(Ar).Campo(CShort(M%))
-                    If M% <> 0 Then ' indice del campo en el archivo
-                        DD$ = Arbtr(Ar).Campo(CShort(M%)) ' campo del archivo
-                        If TipoDeCampo(M%) = 3 Then
-                            DD$ = XFNINV(DD$) ' si fecha lo invierte
+                    AAA = Arbtr(Ar).Campo(CShort(M))
+                    If M <> 0 Then ' indice del campo en el archivo
+                        DD = Arbtr(Ar).Campo(CShort(M)) ' campo del archivo
+                        If TipoDeCampo(M) = 3 Then
+                            DD = XFNINV(DD) ' si fecha lo invierte
                         End If
-                        A$ = Separador + DD$
+                        A = Separador + DD
                     Else
-                        A$ = ""
+                        A = ""
                     End If
                 End If
             Else
-                If M% <> 0 Then ' indice del campo en el archivo
-                    DD$ = Arbtr(Ar).Campo(CShort(M%)) ' campo del archivo
-                    If TipoDeCampo(M%) = 3 Then
-                        DD$ = XFNINV(DD$) ' si fecha lo invierte
+                If M <> 0 Then ' indice del campo en el archivo
+                    DD = Arbtr(Ar).Campo(CShort(M)) ' campo del archivo
+                    If TipoDeCampo(M) = 3 Then
+                        DD = XFNINV(DD) ' si fecha lo invierte
                     End If
-                    A$ = Separador + DD$
+                    A = Separador + DD
                 Else
-                    A$ = ""
+                    A = ""
                 End If
             End If
             IndiceCampo = IndH
@@ -1149,33 +1149,33 @@ Module Arinfon
         ' Procesamiento de subtotales
         Next
         '
-        N% = N% + 1
-        If X7% = 0 Then
+        N = N + 1
+        If X7 = 0 Then
             ImprimeSubtot()
             Exit Sub
         Else
-            YS# = YS# + Y#
+            YS = YS + Y
             If FlagSubTotal = 0 Then
                 ImprimeSubtot()
                 Exit Sub
             End If
         End If
-        YSS# = YSS# + Y#
+        YSS = YSS + Y
         If IndiceOrden < OrdenZ Then
             'Geti = Val(qb4.Right(ArraySort(IndiceOrden + 1), 4))
             Geti = QB.SafeToInteger(ArraySort(IndiceOrden + 1).ToString())
             Arbtr(Ar).Vbtrv1.BtrievePosition = Geti
-            If AAA$ = Arbtr(Ar).Campo(CShort(P%(1))) Then
+            If AAA = Arbtr(Ar).Campo(CShort(P(1))) Then
                 Exit Sub
             End If
         End If
-        If FS% <> 0 Then
-            SwapDouble(YSS#, Y#)
-            FS% = 0
-            T% = T1%
-            A$ = Space(Len(MascaraNumerica)) ' STRING(, 45)
+        If FS <> 0 Then
+            SwapDouble(YSS, Y)
+            FS = 0
+            T = T1
+            A = Space(Len(MascaraNumerica)) ' STRING(, 45)
             PrintDeCampo()
-            A$ = " "
+            A = " "
             PrintDeCampo()
             NroLinea = NroLinea + 2
         End If
@@ -1193,9 +1193,9 @@ Module Arinfon
     End Function
     Sub Pregunta()
         ' Validación de instrucción
-        LC% = QB.SafeToInteger(B$) ' pregunta
-        AppLogger.LogDebug("Pregunta: {0}", Mid(B$, 2))
-        B$ = ""
+        LC = QB.SafeToInteger(B) ' pregunta
+        AppLogger.LogDebug("Pregunta: {0}", Mid(B, 2))
+        B = ""
         RutinaInput()
     End Sub
 
@@ -1215,7 +1215,7 @@ Module Arinfon
         AppLogger.LogDebug("Cabecera: {0}", AE)
         If FlgEdicion <> 0 Then
             ReDim PtrEdicion(28)
-            PTR% = 0
+            PTR = 0
         End If
     End Sub
     Sub SigoInforme()
@@ -1261,47 +1261,47 @@ Module Arinfon
         ' Confirmación de impresora
         AppLogger.LogDebug("Confirmación de impresora correcta")
         Call SiNo()
-        If RR% < 1 Then
-            VUELTA% = 1
+        If RR < 1 Then
+            VUELTA = 1
             Exit Sub
         End If
-        If Y# = 0 And NroInstruccionesArchivadas < 10 Then
+        If Y = 0 And NroInstruccionesArchivadas < 10 Then
             NroInstruccionesArchivadas = NroInstruccionesArchivadas + 1
-            InstruccionesArchivadas(NroInstruccionesArchivadas) = RTEM$ 'BB$
+            InstruccionesArchivadas(NroInstruccionesArchivadas) = RTEM 'BB
         End If
-        'FlgExcell = InStr(B$, " LOTUS") 'FLAG de lotus
+        'FlgExcell = InStr(B, " LOTUS") 'FLAG de lotus
         'If FlgExcell Then
-        '    B$ = "8Nombre de Archivo"
+        '    B = "8Nombre de Archivo"
         '    Pregunta()
-        '    If B$ = "" Then
+        '    If B = "" Then
         '        ConfirmaImpresora()
         '    Else
-        '        Archi$ = B$
+        '        Archi$ = B
         '    End If
-        '    Device$ = Archi$
+        '    DevicE = Archi$
         '    FlgImpresion = 0
         '    NroLinea = 0
         '    NroPagina = 1
-        '    Y# = 12
+        '    Y = 12
         '    KF = 9999
         '    FileClose(Pxt)
         '    FileOpen(Pxt, Device, Microsoft.VisualBasic.OpenMode.Output, , OpenShare.Shared)
         '    Exit Sub
         'End If
         'If FlgImpresion Then
-        '    B$ = "0Encabezado"
+        '    B = "0Encabezado"
         '    Pregunta()
-        '    If B$ = "" Then
-        TituloInforme = BB$
+        '    If B = "" Then
+        TituloInforme = BB
         '    Else
-        '        TituloInforme = B$
+        '        TituloInforme = B
         '    End If
         '    If FechaEmision = "" Then
-        '        B$ = "8Fecha (dd/mm/aa)"
+        '        B = "8Fecha (dd/mm/aa)"
         '        Pregunta()
-        '        FechaEmision = B$
+        '        FechaEmision = B
         '    End If
-        '    B$ = "2Renglones"
+        '    B = "2Renglones"
         '    Pregunta()
             Call Impresora()
         'End If
@@ -1314,12 +1314,12 @@ Module Arinfon
 
     Sub Impresora()
         ' Configuración de impresora
-        KF = CInt(Y#) - 12
+        KF = CInt(Y) - 12
         If KF < 18 Then
             KF = 9999
         End If
         'If FlgImpresion Then
-        '    Device$ = "E:\IMPRE.TXT" ' "LPT1:" ' DEVICEX$
+        '    DevicE = "E:\IMPRE.TXT" ' "LPT1:" ' DEVICEX$
         'End If
 
         Dim HuboExcept As Boolean = False
@@ -1339,7 +1339,7 @@ Module Arinfon
         '    If LargoLinea > 80 Then
         '        Debug.Print("Letra chica")
         '        Call SiNo()
-        '        If RR% Then
+        '        If RR Then
         '            'PRINT #Pxt, LetraChica
         '        End If
         '    End If
@@ -1391,13 +1391,13 @@ Module Arinfon
             Columna = 1
             Ymax = 0
             For IndH = 1 To 10
-                ASIGX%(IndH) = P%(IndH)
-                AnchoCampo = AnchoDeCampo(ASIGX%(IndH - 1))
-                'IF AnchoCampo < LEN(CamposdeBusqueda(ASIGX%(IndH - 1))) THEN AnchoCampo = LEN(CamposdeBusqueda(ASIGX%(IndH - 1)))
+                ASIGX(IndH) = P(IndH)
+                AnchoCampo = AnchoDeCampo(ASIGX(IndH - 1))
+                'IF AnchoCampo < LEN(CamposdeBusqueda(ASIGX(IndH - 1))) THEN AnchoCampo = LEN(CamposdeBusqueda(ASIGX(IndH - 1)))
                 Columna = Columna + AnchoCampo + 1
-                COLU%(IndH) = Columna
+                COLU(IndH) = Columna
                 If Ymax = 0 Then
-                    If ASIGX%(IndH) = 0 Then
+                    If ASIGX(IndH) = 0 Then
                         Ymax = IndH - 1
                     End If
                 End If
@@ -1410,10 +1410,10 @@ Module Arinfon
         End If
         Exiti = 0
         Dim K As Integer = 1
-        Funcion% = 12
+        FuncioN = 12
         While Exiti = 0
             Application.DoEvents()
-            If Funcion% = 12 Then
+            If FuncioN = 12 Then
                 FichaPrimera()
             Else
                 FichaSiguiente()
@@ -1429,19 +1429,19 @@ Module Arinfon
             Else
                 Dim indH_eval As Integer = 0
                 Do While indH_eval <= HH
-                    DD$ = Arbtr(Ar).Campo(CShort(FLG%(indH_eval, 1)))
-                    If TipoDeCampo(FLG%(indH_eval, 1)) = 3 Then
-                        DD$ = XFNINV(DD$) ' fecha
+                    DD = Arbtr(Ar).Campo(CShort(FLG(indH_eval, 1)))
+                    If TipoDeCampo(FLG(indH_eval, 1)) = 3 Then
+                        DD = XFNINV(DD) ' fecha
                     End If
 
-                    Dim inStrResult As Integer = Math.Sign(InStr(DD$, CL$(indH_eval)))
-                    Dim flgResult As Integer = FLG%(indH_eval, 2)
-                    Dim compResult As Integer = If(FLG%(indH_eval, 0) = 2 + Math.Sign(QB.SafeToDouble(DD$) - Z#(indH_eval)), 1, 0)
+                    Dim inStrResult As Integer = Math.Sign(InStr(DD, CL(indH_eval)))
+                    Dim flgResult As Integer = FLG(indH_eval, 2)
+                    Dim compResult As Integer = If(FLG(indH_eval, 0) = 2 + Math.Sign(QB.SafeToDouble(DD) - Z(indH_eval)), 1, 0)
                     Dim cumpleCondicion As Boolean = ((inStrResult Xor flgResult) Or compResult) <> 0
 
                     If cumpleCondicion Then
                         ' Salta filtros OR consecutivos si ya se cumplió el bloque
-                        While indH_eval < HH AndAlso FLG%(indH_eval + 1, 3) <> 0
+                        While indH_eval < HH AndAlso FLG(indH_eval + 1, 3) <> 0
                             indH_eval += 1
                         End While
                         ' Si llegamos al final de los filtros, este registro es válido
@@ -1451,7 +1451,7 @@ Module Arinfon
                         End If
                     Else
                         ' Si no cumple, solo tiene otra oportunidad si la siguiente condición es un 'O' (flag 3)
-                        If indH_eval < HH AndAlso FLG%(indH_eval + 1, 3) <> 0 Then
+                        If indH_eval < HH AndAlso FLG(indH_eval + 1, 3) <> 0 Then
                             ' sigue el bucle para evaluar el siguiente OR
                         Else
                             ' no cumple y no hay OR alternativo: descarta registro
@@ -1488,36 +1488,36 @@ Module Arinfon
                 LeeImprime()
             Next
         End If
-        GG% = N%
-        ClaveBusqueda = CL$(0)
-        If G%(4) <> 0 Then
-            Y# = YS#
-        ElseIf G%(5) <> 0 Then
-            Y# = YS# / N%
+        GG = N
+        ClaveBusqueda = CL(0)
+        If G(4) <> 0 Then
+            Y = YS
+        ElseIf G(5) <> 0 Then
+            Y = YS / N
         Else
             Exit Sub
         End If
         porXML = 0
-        T% = T1%
-        A$ = Space(Len(MascaraNumerica)) ' String(61,Len(MascaraNumerica))
+        T = T1
+        A = Space(Len(MascaraNumerica)) ' String(61,Len(MascaraNumerica))
         Call PrintDeCampo()
         'PRINT 
-        T% = T1% - 9
-        A$ = A2
+        T = T1 - 9
+        A = A2
         PrintDeCampo()
         ImprimeSubtot()
         porXML = -1
     End Sub
     Sub ImprimeSubtot()
         ' Impresión de subtotales
-        If X7% <> 0 Then
-            YSS# = 0
-            'PRINT USING MascaraNumerica; Y#;
+        If X7 <> 0 Then
+            YSS = 0
+            'PRINT USING MascaraNumerica; Y;
             'If FlgImpresion Then
-            '    Print(Pxt, foo(Format(Y#, MascaraNumerica)))
+            '    Print(Pxt, foo(Format(Y, MascaraNumerica)))
             'End If
             'If FlgExcell Then
-            '    Print(Pxt, Format(Y#, MascaraNumerica))
+            '    Print(Pxt, Format(Y, MascaraNumerica))
             'End If
             If porXML = -1 Then
                 ' *** escribo fila XML
@@ -1525,7 +1525,7 @@ Module Arinfon
                 algo = algo + 1
                 'MsgBox(algo.ToString)
                 'Print(Pxp, TAB(1), "<DataColumn" + algo.ToString + ">")
-                A = foo(Format(Y#, MascaraNumerica))
+                A = foo(Format(Y, MascaraNumerica))
                 Dim ZZ As String = A.Replace("|", "")
                 ZZ = ZZ.Replace(Chr(22), " ")
                 Dim Temp As String = ZZ
@@ -1591,127 +1591,127 @@ Module Arinfon
         Dim UU As Integer = 0
         Dim IndH As Integer = 0
 
-        N% = 0
+        N = 0
 
         QQ = 0
-        YS# = 0
-        YSS# = 0
+        YS = 0
+        YSS = 0
 
         For Indice = 0 To 11
-            P%(Indice) = 0
-            R%(Indice) = 0
-            Z#(Indice) = 0
-            G%(Indice) = 0
-            ZZ#(Indice) = 0
+            P(Indice) = 0
+            R(Indice) = 0
+            Z(Indice) = 0
+            G(Indice) = 0
+            ZZ(Indice) = 0
         Next
 
         For Indice = 0 To 5
             For SIndice = 0 To 3
-                FLG%(Indice, SIndice) = 0
+                FLG(Indice, SIndice) = 0
             Next
         Next
         For Indice = 0 To 11
-            ZZA$(Indice) = ""
-            SCLA%(Indice) = 0
-            SCAM%(Indice) = 0
+            ZZA(Indice) = ""
+            SCLA(Indice) = 0
+            SCAM(Indice) = 0
         Next
 
         A2 = ""
-        AAA$ = ""
+        AAA = ""
         AE = ""
         ' AE = "NUM "
         IndiceOrden = 0
-        LC% = 0
-        FS% = 0
+        LC = 0
+        FS = 0
         ClaveBusqueda = ""
         FlgImpresion = 0
-        BB$ = B$
-        B$ = " " + B$
-        L% = Len(B$)
-        RTEM$ = B$
+        BB = B
+        B = " " + B
+        L = Len(B)
+        RTEM = B
         Dim Temp As String = ""
         Dim IndiceDeFrase As Integer
-        For IndiceDeFrase = 1 To L%    ' IndiceDeFrase es el puntero sobre la frase a decodificar
-            ISS = InStr(BuscoSeparador, Mid(B$, IndiceDeFrase, 1)) ' "+-*/%^=' :;.,()HVBSCZK"
-            'MsgBox(Mid(B$, IndiceDeFrase, 1))
+        For IndiceDeFrase = 1 To L    ' IndiceDeFrase es el puntero sobre la frase a decodificar
+            ISS = InStr(BuscoSeparador, Mid(B, IndiceDeFrase, 1)) ' "+-*/%^=' :;.,()HVBSCZK"
+            'MsgBox(Mid(B, IndiceDeFrase, 1))
             If ISS < 1 Then
                 Continue For ' avanza el puntero
             Else
-                UU% = 4 ' precision en la busqueda
+                UU = 4 ' precision en la busqueda
             End If
-            If InStr(IndiceDeFrase, B$, " '?'") = IndiceDeFrase Then 'funcion pregunta
-                Temp = B$
-                B$ = "0" + CamposdeBusqueda(P%(QQ))
+            If InStr(IndiceDeFrase, B, " '?'") = IndiceDeFrase Then 'funcion pregunta
+                Temp = B
+                B = "0" + CamposdeBusqueda(P(QQ))
                 Pregunta() ' pregunta
-                B$ = qb4.Left(Temp, IndiceDeFrase) + B$ + Mid(Temp, IndiceDeFrase + 4)
-                L% = Len(B$)
-                BB$ = B$
+                B = qb4.Left(Temp, IndiceDeFrase) + B + Mid(Temp, IndiceDeFrase + 4)
+                L = Len(B)
+                BB = B
             End If
-            If InStr(IndiceDeFrase, B$, " '") = IndiceDeFrase Then 'comienzo de clave
+            If InStr(IndiceDeFrase, B, " '") = IndiceDeFrase Then 'comienzo de clave
                 FI = IndiceDeFrase + 2
-                CL$(IndH) = Mid(B$, FI, InStr(FI, B$, "'") - FI) ' clave alfanumerica
-                FLG%(IndH, 0) = InStr("<=>)", qb4.Left(CL$(IndH), 1)) 'menor igual mayor
-                Z#(IndH) = QB.SafeToDouble(Mid(CL$(IndH), 2)) ' clave numerica
-                IndiceDeFrase = IndiceDeFrase + Len(CL$(IndH)) + 2
-                FLG%(IndH, 1) = P%(QQ) ' campo clave
+                CL(IndH) = Mid(B, FI, InStr(FI, B, "'") - FI) ' clave alfanumerica
+                FLG(IndH, 0) = InStr("<=>)", qb4.Left(CL(IndH), 1)) 'menor igual mayor
+                Z(IndH) = QB.SafeToDouble(Mid(CL(IndH), 2)) ' clave numerica
+                IndiceDeFrase = IndiceDeFrase + Len(CL(IndH)) + 2
+                FLG(IndH, 1) = P(QQ) ' campo clave
                 IndH = IndH + 1
-                SCLAC% = 1
-                SCMPC% = 0
+                SCLAC = 1
+                SCMPC = 0
                 Continue For ' avanza el puntero
             End If
-            If InStr(" NO | NI | SIN ", Mid(B$, IndiceDeFrase, UU%)) <> 0 Then
-                FLG%(IndH, 2) = 1 ' flag de exclusion
-            ElseIf Mid(B$, IndiceDeFrase, 3) = " O " Then
-                FLG%(IndH, 3) = 1 ' flag de inclusion
+            If InStr(" NO | NI | SIN ", Mid(B, IndiceDeFrase, UU)) <> 0 Then
+                FLG(IndH, 2) = 1 ' flag de exclusion
+            ElseIf Mid(B, IndiceDeFrase, 3) = " O " Then
+                FLG(IndH, 3) = 1 ' flag de inclusion
             End If
             If ISS <= 7 Then 'claves matematicas o de sustitucion
-                R%(QQ + 1) = ISS
-                G%(6) = 1
-                If R%(QQ) < 1 Then R%(QQ) = 1
-                ZZ#(QQ + 1) = QB.SafeToDouble(Mid(B$, IndiceDeFrase + 1))
-                If ZZ#(QQ + 1) <> 0 Then
+                R(QQ + 1) = ISS
+                G(6) = 1
+                If R(QQ) < 1 Then R(QQ) = 1
+                ZZ(QQ + 1) = QB.SafeToDouble(Mid(B, IndiceDeFrase + 1))
+                If ZZ(QQ + 1) <> 0 Then
                     QQ = QQ + 1
                     IndiceDeFrase = IndiceDeFrase + 2
                 End If
                 'rutina para sustitucion
-                If ISS = 7 And ZZ#(QQ + 1) = 0 Then ' igual(=) y no numerica
-                    If SCLAC% <> 0 Then ' si antes una 'clave'
+                If ISS = 7 And ZZ(QQ + 1) = 0 Then ' igual(=) y no numerica
+                    If SCLAC <> 0 Then ' si antes una 'clave'
                         IndH = IndH - 1
-                        ZZA$(QQ + 1) = CL$(IndH)
-                        CL$(IndH) = ""
-                        FLG%(IndH, 0) = 0
-                        Z#(IndH) = 0
-                        FLG%(IndH, 1) = 0
-                        FLG%(IndH, 2) = 0
-                        FLG%(IndH, 3) = 0
-                        SCLA%(QQ + 1) = 1
-                        SCLAC% = 0
-                    ElseIf SCMPC% <> 0 Then ' antes un campo
-                        SCAM%(IndH) = P%(QQ + 1)
-                        SCAMC% = 0
+                        ZZA(QQ + 1) = CL(IndH)
+                        CL(IndH) = ""
+                        FLG(IndH, 0) = 0
+                        Z(IndH) = 0
+                        FLG(IndH, 1) = 0
+                        FLG(IndH, 2) = 0
+                        FLG(IndH, 3) = 0
+                        SCLA(QQ + 1) = 1
+                        SCLAC = 0
+                    ElseIf SCMPC <> 0 Then ' antes un campo
+                        SCAM(IndH) = P(QQ + 1)
+                        SCAMC = 0
                     End If
                 Else
-                    SCLAC% = 0
-                    SCAMC% = 0
+                    SCLAC = 0
+                    SCAMC = 0
                 End If
                 'ElseIf ISS = 8 Then
                 '    'subtotal
-                '    SubtDeCampo(P%(QQ)) = 1 ' flag de subtotal
+                '    SubtDeCampo(P(QQ)) = 1 ' flag de subtotal
             End If
             'verifica campos + palabras claves
             Dim NroCampoInstruccion As Integer = 0
             For NroCampoInstruccion = 1 To CantidadCamposeInstruccionesaBuscar 'busca la palabra
-                Uc% = UU%
+                Uc = UU
                 If NroCampoInstruccion = CantidadCampos + 1 Then
                     NroCampoInstruccion = CantidadCampos + 2 ' analiza palabras claves menos TOTAL
                 End If
                 Do
-                    AAA$ = LTrim(Mid(B$, IndiceDeFrase + 1, Uc%))
-                    If InStr(CamposdeBusqueda(NroCampoInstruccion), AAA$) <> 0 And Len(AAA$) = Uc% Then
-                        Uc% = Uc% + 1
+                    AAA = LTrim(Mid(B, IndiceDeFrase + 1, Uc))
+                    If InStr(CamposdeBusqueda(NroCampoInstruccion), AAA) <> 0 And Len(AAA) = Uc Then
+                        Uc = Uc + 1
                     Else
-                        If Uc% > UU% Then
-                            UU% = Uc%
+                        If Uc > UU Then
+                            UU = Uc
                             Kx = NroCampoInstruccion
                         End If
                         Exit Do
@@ -1719,20 +1719,20 @@ Module Arinfon
                 Loop
             Next
             If Kx <> 0 Then
-                IndiceDeFrase = IndiceDeFrase + Uc% - 2
+                IndiceDeFrase = IndiceDeFrase + Uc - 2
                 NroCampoInstruccion = Kx
                 Kx = 0
                 If NroCampoInstruccion > CantidadCampos Then
-                    GG% = NroCampoInstruccion - CantidadCampos
-                    G%(GG%) = QQ + 1
+                    GG = NroCampoInstruccion - CantidadCampos
+                    G(GG) = QQ + 1
                 Else
                     QQ = QQ + 1
-                    P%(QQ) = NroCampoInstruccion
-                    SCAMC% = 1
-                    SCLAC% = 0
+                    P(QQ) = NroCampoInstruccion
+                    SCAMC = 1
+                    SCLAC = 0
                 End If
             End If
-            'WRITE G%(4): INPUT AAA
+            'WRITE G(4): INPUT AAA
             ' 50565: - Etiqueta eliminada al usar Continue For
         Next
 
@@ -1740,45 +1740,45 @@ Module Arinfon
         If QQ < 1 Then
             If IndH <> 0 Then
                 QQ = 1
-                P%(QQ) = 1
+                P(QQ) = 1
             Else
-                VUELTA% = 1
+                VUELTA = 1
             End If
         End If
-        G%(3) = 1 ' fuerzo impresion
-        OrdenxCampo = P%(G%(2))
-        FlgImpresion = G%(3)
-        X7% = G%(4) + G%(5) + G%(6) 'total o promedio o claves matematicas o de sustitucion
-        If X7% <> 0 Then
-            R%(X7% - G%(6)) = 1 'total o promedio
+        G(3) = 1 ' fuerzo impresion
+        OrdenxCampo = P(G(2))
+        FlgImpresion = G(3)
+        X7 = G(4) + G(5) + G(6) 'total o promedio o claves matematicas o de sustitucion
+        If X7 <> 0 Then
+            R(X7 - G(6)) = 1 'total o promedio
             QQ = QQ + 1
-            P%(QQ) = CantidadCampos + 1
+            P(QQ) = CantidadCampos + 1
             AnchoDeCampo(CantidadCampos + 1) = Len(MascaraNumerica)
             TipoDeCampo(CantidadCampos + 1) = 1
         End If
-        If X7% <> 0 Then
-            If G%(4) <> 0 Then
+        If X7 <> 0 Then
+            If G(4) <> 0 Then
                 A2 = "Total ..."
-            ElseIf G%(5) <> 0 Then
+            ElseIf G(5) <> 0 Then
                 A2 = "Promedio."
-            ElseIf InStr(B$, "=") <> 0 Then
+            ElseIf InStr(B, "=") <> 0 Then
                 A2 = "Cambio"
-                X7% = 0
+                X7 = 0
                 QQ = QQ - 1
-            ElseIf G%(6) <> 0 Then
+            ElseIf G(6) <> 0 Then
                 A2 = CamposdeBusqueda(CantidadCampos + 1) ' ant 19
             End If
         End If
         For IndH = 1 To QQ
-            IndiceDeFrase = P%(IndH)
-            L% = AnchoDeCampo(IndiceDeFrase) - Len(CamposdeBusqueda(IndiceDeFrase))
-            If L% < 0 Then
-                L% = 0
+            IndiceDeFrase = P(IndH)
+            L = AnchoDeCampo(IndiceDeFrase) - Len(CamposdeBusqueda(IndiceDeFrase))
+            If L < 0 Then
+                L = 0
             End If
-            'LPRINT CamposdeBusqueda(IndiceDeFrase), L%, IndiceDeFrase
-            Q%(IndH) = Len(AE) + 1
-            AE = AE + Separador + CamposdeBusqueda(IndiceDeFrase) + Space(L%)
-            AnchoDeColumna(IndH) = Len(CamposdeBusqueda(IndiceDeFrase) + Space(L%))
+            'LPRINT CamposdeBusqueda(IndiceDeFrase), L, IndiceDeFrase
+            Q(IndH) = Len(AE) + 1
+            AE = AE + Separador + CamposdeBusqueda(IndiceDeFrase) + Space(L)
+            AnchoDeColumna(IndH) = Len(CamposdeBusqueda(IndiceDeFrase) + Space(L))
         Next
         '
         LargoLinea = Len(AE)
@@ -1790,14 +1790,14 @@ Module Arinfon
         'If FlgExcell Then
         '    Print(Pxt, "")
         'End If
-        T1% = LargoLinea - Len(MascaraNumerica) + 1
-        FlagSubTotal = Math.Sign(G%(4)) And Not Math.Sign(OrdenxCampo - P%(1))
-        FlgOrdenInverso = OrdenxCampo * InStr(B$, " INVER")  'flag de invertido
-        FlgOrdenAlfa = OrdenxCampo * InStr(B$, " ALFAB") 'flag de orede creciente
-        FlgOrdenNume = OrdenxCampo * InStr(B$, " NUMER") 'flag de orede creciente
-        FlgSubrayado = InStr(B$, " SUBRA") 'FLAG de subrayado
-        FlgEdicion = InStr(B$, " EDITA") 'FLAG de edicion
-        'FlgExcell = InStr(B$, " LOTUS") 'FLAG de lotus
+        T1 = LargoLinea - Len(MascaraNumerica) + 1
+        FlagSubTotal = Math.Sign(G(4)) And Not Math.Sign(OrdenxCampo - P(1))
+        FlgOrdenInverso = OrdenxCampo * InStr(B, " INVER")  'flag de invertido
+        FlgOrdenAlfa = OrdenxCampo * InStr(B, " ALFAB") 'flag de orede creciente
+        FlgOrdenNume = OrdenxCampo * InStr(B, " NUMER") 'flag de orede creciente
+        FlgSubrayado = InStr(B, " SUBRA") 'FLAG de subrayado
+        FlgEdicion = InStr(B, " EDITA") 'FLAG de edicion
+        'FlgExcell = InStr(B, " LOTUS") 'FLAG de lotus
         OtraPantalla()
         AppLogger.LogDebug("Configurando {0} columnas", LargoLinea)
         If LargoLinea > 80 Then
@@ -1805,15 +1805,15 @@ Module Arinfon
         Else
             LargoLinea = 80
         End If
-        AppLogger.LogDebug("Query recibido: {0}", B$)
+        AppLogger.LogDebug("Query recibido: {0}", B)
         AppLogger.LogDebug("Procesando query...")
         For IndH = 0 To HH
-            If FLG%(IndH, 2) <> 0 Then
+            If FLG(IndH, 2) <> 0 Then
                 AppLogger.LogDebug("Salteo filtro")
             Else
                 AppLogger.LogDebug("Busco filtro")
             End If
-            AppLogger.LogDebug("Campo: {0}, Valor: '{1}'", CamposdeBusqueda(FLG%(IndH, 1)), CL$(IndH))
+            AppLogger.LogDebug("Campo: {0}, Valor: '{1}'", CamposdeBusqueda(FLG(IndH, 1)), CL(IndH))
         Next
         If Len(A2) <> 0 Then
             AppLogger.LogDebug("Cálculo: {0}", A2)
@@ -1840,13 +1840,13 @@ Module Arinfon
         Do
             AppLogger.LogDebug("Continuando proceso")
             Call SiNo()
-            If RR% <> 2 Then Exit Do
+            If RR <> 2 Then Exit Do
             'Correcion()
         Loop
-        If RR% <> 0 Then
+        If RR <> 0 Then
             OtraPantalla()
         Else
-            VUELTA% = 1
+            VUELTA = 1
             ' otro informe
         End If
     End Sub
@@ -1854,17 +1854,17 @@ Module Arinfon
     Sub SiNo()
         ' si o no
         AppLogger.LogDebug("Solicitando confirmación (s/n)")
-        RR% = -1
-        Do While RR% < 0
-            Y# = 0
+        RR = -1
+        Do While RR < 0
+            Y = 0
             RutinaInput()
             A = "S"
-            If A$ = "N" Then
-                RR% = 0
-            ElseIf A$ = "S" Then
-                RR% = 1
-            ElseIf A$ = "E" And FlgEdicion = 1 Then
-                RR% = 2
+            If A = "N" Then
+                RR = 0
+            ElseIf A = "S" Then
+                RR = 1
+            ElseIf A = "E" And FlgEdicion = 1 Then
+                RR = 2
             End If
         Loop
     End Sub
@@ -1872,9 +1872,9 @@ Module Arinfon
     Sub RutinaInput()
         'rutina input
         ' Input de usuario
-        'retorna ARRI%, B$, Y#        
-        Y# = QB.SafeToDouble(B$)
-        LC% = 0
+        'retorna ARRI, B, Y        
+        Y = QB.SafeToDouble(B)
+        LC = 0
     End Sub
 
     Sub GrabaArchivoListados()
@@ -1910,7 +1910,7 @@ Module Arinfon
     Dim algo As Integer
     Sub PrintDeCampo()
         ' Impresión de campo
-        'MsgBox("PRINT TAB(" + T.ToString + "); " + A$ + ";") ' print y lprint de campo
+        'MsgBox("PRINT TAB(" + T.ToString + "); " + A + ";") ' print y lprint de campo
         If porXML = -1 Then
             If IndiceCampo = 1 Then
                 'Print(Pxp, TAB(1), "<fila>")
@@ -1925,14 +1925,14 @@ Module Arinfon
         End If
 
         'If FlgImpresion Then
-        '    Print(Pxt, TAB(T%), A$)
+        '    Print(Pxt, TAB(T), A)
         'End If
         'If FlgExcell Then
-        '    Print(Pxt, AL$)
+        '    Print(Pxt, AL)
         'End If
 
         If porXML = -1 Then
-            If M% <= CantidadCampos Then
+            If M <= CantidadCampos Then
                 ' *** escribo fila XML
                 'Print(Pxp, TAB(1), "<" + NN(M) + ">")
                 algo = algo + 1
