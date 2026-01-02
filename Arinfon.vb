@@ -153,7 +153,7 @@ Module Arinfon
 
 
     Sub Asignavariables()
-50245:
+        ' Inicio de asignación de variables de campos
         CantidadCampos = Arbtr(Ar).NumerodeCamposVisibles - 2
         Instrucciones(0) = "| Campos de Referencia |"
         Dim Desde As Integer = 0
@@ -293,11 +293,11 @@ Module Arinfon
             ' --- 50490: Mostrar informes guardados ---
             KF = 0
             F% = 1
-            Debug.Print(Tiq$(F%))
+            AppLogger.LogDebug("Mostrando título: {0}", Tiq$(F%))
             FE% = F%
             Dim IndiceInstruccion As Integer
             For IndiceInstruccion = 1 To NroInstruccionesArchivadas
-                Debug.Print(Str(IndiceInstruccion) + "- " + InstruccionesArchivadas(IndiceInstruccion))
+                AppLogger.LogDebug("Instrucción {0}: {1}", IndiceInstruccion, InstruccionesArchivadas(IndiceInstruccion))
             Next
 
             Dim leerComando As Boolean = True
@@ -317,7 +317,7 @@ Module Arinfon
                     Keynum = Keynum + 1
                     Status = Arbtr(Ar).CallBtrv(12, Keyval, Keynum)
                     If (Status <> 0) And (Status <> 6) Then
-                        Debug.Print("STAT: " & Status)
+                        AppLogger.LogWarn("Cambio clave fallido - Status: {0}", Status)
                         AppLogger.LogError("Error inesperado al cambiar clave Btrieve. Status: {0}, Keynum: {1}", Status, Keynum)
                         MsgBox("Error al cambiar clave: " & Status.ToString(), MsgBoxStyle.Exclamation)
                         Keynum = 0 ' Reset a la clave por defecto
@@ -332,7 +332,7 @@ Module Arinfon
                 Y# = QB.SafeToDouble(B$)
                 If Y# > 0 And Y# <= NroInstruccionesArchivadas Then
                     B$ = InstruccionesArchivadas(CInt(Y#))
-                    Debug.Print(B$)
+                    AppLogger.LogDebug("Instruccion cargada: {0}", B$)
                 End If
 
                 If Y# < 0 Then
@@ -347,14 +347,14 @@ Module Arinfon
 
                 If qb4.Left(B$, 4) = "GRAB" Then
                     C$ = "-=< Grabando >=-"  'graba en secuencial
-                    Debug.Print(C$)
+                    AppLogger.LogDebug("Grabando archivo de listados")
                     GrabaArchivoListados()
                     repetirArinfo = True ' Equivale a GoTo 50490
                     Exit Do
                 End If
 
                 C$ = " sale ..!"
-                Debug.Print(C$)
+                AppLogger.LogDebug("Saliendo del proceso de informe")
                 VUELTA% = 0
                 Call Deco1()
                 If VUELTA% <> 0 Then
@@ -975,8 +975,8 @@ Module Arinfon
     End Sub
 
     Sub IniciaOrden()
-50790:
-        Debug.Print("Estoy leyendo" & "(Un Momento)")
+        ' Inicio del proceso de ordenamiento
+        AppLogger.LogDebug("Iniciando lectura de datos para ordenamiento")
         AAA$ = ""
         L% = 0
         ZM = 0
@@ -1005,7 +1005,7 @@ Module Arinfon
     Sub FichaPrimera()
         Status = Arbtr(Ar).CallBtrv(12, Keyval, Keynum)
         If (Status <> 0) And (Status <> 9) Then
-            Debug.Print("STAT: " & Status) : Stop
+            AppLogger.LogError("FichaPrimera - Error Btrieve inesperado. Status: {0}", Status)
         End If
         Funcion = 6
     End Sub
@@ -1013,7 +1013,7 @@ Module Arinfon
     Sub FichaSiguiente()
         Status = Arbtr(Ar).CallBtrv(6, Keyval, Keynum)
         If (Status <> 0) And (Status <> 9) Then
-            Debug.Print("STAT: " & Status) : Stop
+            AppLogger.LogError("FichaSiguiente - Error Btrieve inesperado. Status: {0}", Status)
         End If
     End Sub
 
@@ -1033,7 +1033,7 @@ Module Arinfon
         If TipoDeCampo(1) = 3 Then
             DD$ = XFNINV$(DD$)
         End If
-        Debug.Print(DD$)
+        AppLogger.LogDebug("Campo leído: {0}", DD$)
     End Sub
 
     Sub Swap(ByRef a As Object, ByRef b As Object)
@@ -1112,7 +1112,7 @@ Module Arinfon
                     End If
                     Status = Arbtr(Ar).CallBtrv(3, Keyval, Keynum)
                     If Status <> 0 Then
-                        Debug.Print("STAT: " & Status)
+                        AppLogger.LogWarn("Error en CallBtrv - Status: {0}", Status)
                     End If
                     Y# = 0.0#
                 Case Else
@@ -1146,7 +1146,7 @@ Module Arinfon
             End If
             IndiceCampo = IndH
             PrintDeCampo() ' imprime el campo
-50721:
+        ' Procesamiento de subtotales
         Next
         '
         N% = N% + 1
@@ -1192,15 +1192,15 @@ Module Arinfon
         Return RetVal
     End Function
     Sub Pregunta()
-50220:
+        ' Validación de instrucción
         LC% = QB.SafeToInteger(B$) ' pregunta
-        Debug.Print("              " & Mid(B$, 2) & "..? ")
+        AppLogger.LogDebug("Pregunta: {0}", Mid(B$, 2))
         B$ = ""
         RutinaInput()
     End Sub
 
     Sub Cabezapantalla()
-50425:
+        ' Grabación de archivo de listados
         'Print(Pxt, TAB(1), "Archivo: " + NombreArchivo)
         'Print(Pxt, TAB(LargoLinea - 7), "Hoja " + NroPagina.ToString)
         'Print(Pxt, "")
@@ -1211,15 +1211,15 @@ Module Arinfon
         OtraPantalla()
     End Sub
     Sub OtraPantalla()
-50215:
-        Debug.Print(Chr(12) & AE) ' mensaje cabecera
+        ' Cabecera de pantalla
+        AppLogger.LogDebug("Cabecera: {0}", AE)
         If FlgEdicion <> 0 Then
             ReDim PtrEdicion(28)
             PTR% = 0
         End If
     End Sub
     Sub SigoInforme()
-50430:
+        ' Otra pantalla
         Dim Tecla As String = ""
         'Tecla = INKEY$
         If Tecla = Chr(27) Or Tecla = " " Then
@@ -1231,7 +1231,7 @@ Module Arinfon
         CortedePagina()
     End Sub
     Sub CortedePagina()
-50435:
+        ' Fin cabecera
         NroLinea = NroLinea + 1
         If NroLinea < KF Then
             Exit Sub
@@ -1258,8 +1258,8 @@ Module Arinfon
         End If
     End Sub
     Sub ConfirmaImpresora()
-50570:
-        Debug.Print("Correcto")
+        ' Confirmación de impresora
+        AppLogger.LogDebug("Confirmación de impresora correcta")
         Call SiNo()
         If RR% < 1 Then
             VUELTA% = 1
@@ -1307,13 +1307,13 @@ Module Arinfon
         'End If
     End Sub
     Sub Delay()
-50190:
+        ' Delay para procesamiento
         For Indice As Integer = 1 To 2000
         Next ' delay
     End Sub
 
     Sub Impresora()
-50575:
+        ' Configuración de impresora
         KF = CInt(Y#) - 12
         If KF < 18 Then
             KF = 9999
@@ -1381,7 +1381,7 @@ Module Arinfon
         Cabezapantalla()
     End Sub
     Sub Deco2()
-50650:
+        ' Decodificación secundaria
         Dim IndH As Integer = 0
         Dim Columna As Integer = 0
         Dim AnchoCampo As Integer = 0
@@ -1475,7 +1475,7 @@ Module Arinfon
         OrdenZ = IndiceOrden - 1
         If OrdenxCampo <> 0 Then
             ArraySort.Sort() ' OrdenZ)
-            Debug.Print("Estoy leyendo" & "(Un Momento)")
+            AppLogger.LogDebug("Procesando datos ordenados")
             OtraPantalla()
             If FlgOrdenInverso <> 0 Then
                 SwapInteger(OrdenZ, OrdenA)
@@ -1509,7 +1509,7 @@ Module Arinfon
         porXML = -1
     End Sub
     Sub ImprimeSubtot()
-50735:
+        ' Impresión de subtotales
         If X7% <> 0 Then
             YSS# = 0
             'PRINT USING MascaraNumerica; Y#;
@@ -1557,7 +1557,7 @@ Module Arinfon
             '    Print(Pxt, "")
             'End If
         End If
-        Debug.Print("")
+        ' Linea vacía para formato
         'If FlgImpresion Then
         '    Print(Pxt, TAB(LargoLinea + 1), "|")
         'End If
@@ -1577,7 +1577,7 @@ Module Arinfon
         End If
     End Sub
     Sub Deco1()
-50520:
+        ' Decodificación principal
         ' inicializa
         Dim Kx As Integer = 0
         Dim Uc As Integer = 0
@@ -1799,34 +1799,34 @@ Module Arinfon
         FlgEdicion = InStr(B$, " EDITA") 'FLAG de edicion
         'FlgExcell = InStr(B$, " LOTUS") 'FLAG de lotus
         OtraPantalla()
-        Debug.Print(New String("*"c, LargoLinea) & Chr(24) & Chr(13) & LargoLinea & "Columnas")
+        AppLogger.LogDebug("Configurando {0} columnas", LargoLinea)
         If LargoLinea > 80 Then
-            Debug.Print("No entra en la Pantalla ...")
+            AppLogger.LogWarn("El ancho de {0} columnas no entra en pantalla", LargoLinea)
         Else
             LargoLinea = 80
         End If
-        Debug.Print("Pediste:" & B$)
-        Debug.Print("Entonces,")
+        AppLogger.LogDebug("Query recibido: {0}", B$)
+        AppLogger.LogDebug("Procesando query...")
         For IndH = 0 To HH
             If FLG%(IndH, 2) <> 0 Then
-                Debug.Print("Salteo ")
+                AppLogger.LogDebug("Salteo filtro")
             Else
-                Debug.Print("Busco ")
+                AppLogger.LogDebug("Busco filtro")
             End If
-            Debug.Print(CamposdeBusqueda(FLG%(IndH, 1)) & " '" & CL$(IndH) & "'")
+            AppLogger.LogDebug("Campo: {0}, Valor: '{1}'", CamposdeBusqueda(FLG%(IndH, 1)), CL$(IndH))
         Next
         If Len(A2) <> 0 Then
-            Debug.Print("Calculo " & A2)
+            AppLogger.LogDebug("Cálculo: {0}", A2)
         End If
         If OrdenxCampo <> 0 Then
-            Debug.Print("Ordenado por " & CamposdeBusqueda(OrdenxCampo))
+            AppLogger.LogDebug("Ordenando por: {0}", CamposdeBusqueda(OrdenxCampo))
             If FlgOrdenInverso <> 0 Then
-                Debug.Print(" (Inv)")
+                AppLogger.LogDebug("Orden inverso")
             Else
-                Debug.Print("")
+                ' Orden normal
             End If
         End If
-        Debug.Print("Sale por ")
+        AppLogger.LogDebug("Finalizando configuración de informe")
         'If FlgExcell Then
         '    Debug.Print("Archivo")
         'ElseIf FlgImpresion Then
@@ -1838,7 +1838,7 @@ Module Arinfon
     Sub Sigo()
         'fin de pantalla, o interupcion
         Do
-            Debug.Print("Sigo")
+            AppLogger.LogDebug("Continuando proceso")
             Call SiNo()
             If RR% <> 2 Then Exit Do
             'Correcion()
@@ -1853,7 +1853,7 @@ Module Arinfon
 
     Sub SiNo()
         ' si o no
-        Debug.Print("..? (s/n) ")
+        AppLogger.LogDebug("Solicitando confirmación (s/n)")
         RR% = -1
         Do While RR% < 0
             Y# = 0
@@ -1871,7 +1871,7 @@ Module Arinfon
 
     Sub RutinaInput()
         'rutina input
-50310:
+        ' Input de usuario
         'retorna ARRI%, B$, Y#        
         Y# = QB.SafeToDouble(B$)
         LC% = 0
@@ -1909,7 +1909,7 @@ Module Arinfon
 
     Dim algo As Integer
     Sub PrintDeCampo()
-50225:
+        ' Impresión de campo
         'MsgBox("PRINT TAB(" + T.ToString + "); " + A$ + ";") ' print y lprint de campo
         If porXML = -1 Then
             If IndiceCampo = 1 Then
