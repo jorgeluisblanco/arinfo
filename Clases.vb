@@ -114,35 +114,48 @@ End Class
 Public Class QB
     'Note: The data types 'Currency' and 'Variant' are not supported
 
-    'Type-safe declarations because 'As Any' is not supported in .NET
-    Private Declare Sub CopyMemoryMKD Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByVal hDest As String, ByRef hSource As Double, _
-        ByVal iBytes As Integer)
-    Private Declare Sub CopyMemoryCVD Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByRef hDest As Double, ByVal hSource As String, _
-        ByVal iBytes As Integer)
-    Private Declare Sub CopyMemoryMKS Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByVal hDest As String, ByRef hSource As Single, _
-        ByVal iBytes As Integer)
-    Private Declare Sub CopyMemoryCVS Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByRef hDest As Single, ByVal hSource As String, _
-        ByVal iBytes As Integer)
-    Private Declare Sub CopyMemoryMKL Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByVal hDest As String, ByRef hSource As Integer, _
-        ByVal iBytes As Integer)
-    Private Declare Sub CopyMemoryCVL Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByRef hDest As Integer, ByVal hSource As String, _
-        ByVal iBytes As Integer)
-    Private Declare Sub CopyMemoryMKI Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByVal hDest As String, ByRef hSource As Short, ByVal iBytes As Integer)
-    Private Declare Sub CopyMemoryCVI Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByRef hDest As Short, ByVal hSource As String, ByVal iBytes As Integer)
-    Private Declare Sub CopyMemoryMKDt Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByVal hDest As String, ByRef hSource As Double, _
-        ByVal iBytes As Integer)
-    Private Declare Sub CopyMemoryCVDt Lib "Kernel32" Alias "RtlMoveMemory" _
-        (ByRef hDest As Double, ByVal hSource As String, _
-        ByVal iBytes As Integer)
+    ' Declaraciones P/Invoke modernizadas usando DllImport
+    ' Referencia: https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.dllimportattribute
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryMKD(ByVal hDest As String, ByRef hSource As Double, ByVal iBytes As Integer)
+    End Sub
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryCVD(ByRef hDest As Double, ByVal hSource As String, ByVal iBytes As Integer)
+    End Sub
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryMKS(ByVal hDest As String, ByRef hSource As Single, ByVal iBytes As Integer)
+    End Sub
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryCVS(ByRef hDest As Single, ByVal hSource As String, ByVal iBytes As Integer)
+    End Sub
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryMKL(ByVal hDest As String, ByRef hSource As Integer, ByVal iBytes As Integer)
+    End Sub
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryCVL(ByRef hDest As Integer, ByVal hSource As String, ByVal iBytes As Integer)
+    End Sub
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryMKI(ByVal hDest As String, ByRef hSource As Short, ByVal iBytes As Integer)
+    End Sub
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryCVI(ByRef hDest As Short, ByVal hSource As String, ByVal iBytes As Integer)
+    End Sub
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryMKDt(ByVal hDest As String, ByRef hSource As Double, ByVal iBytes As Integer)
+    End Sub
+    
+    <System.Runtime.InteropServices.DllImport("Kernel32", EntryPoint:="RtlMoveMemory")>
+    Private Shared Sub CopyMemoryCVDt(ByRef hDest As Double, ByVal hSource As String, ByVal iBytes As Integer)
+    End Sub
 
     'Convert from Double to String.
     Shared Function MKD(ByRef Value As Double) As String

@@ -259,14 +259,9 @@ Module Arinfon
         Info.TextBox1.Text = ""
         Ar = ARx
         ' ejemplo de orden directa
-        'B = "ORDEN POR LETRA CODI"
-        'Call Deco1()
-        'If FlgImpresion Then
         TituloInforme = "TITULO"
         Y = 45
         Call Impresora()
-        'End If
-        'Call Deco2()
 
         Tiq(1) = "Generador de Informes"
         Tiq(2) = "Que hacemos ?"
@@ -370,20 +365,12 @@ Module Arinfon
             Loop
         Loop
         Call Deco2()
-        'otro info ? o fin de info
+        ' Resultado del informe
         If GG <> 0 Then
-            'Print(Pxt, TAB(1), GG.ToString & " Registros ")
+            AppLogger.LogDebug("Registros encontrados: {0}", GG)
         Else
-            'Print(Pxt, "No Encontre '" & ClaveBusqueda & "'...")
+            AppLogger.LogDebug("No se encontró: '{0}'", ClaveBusqueda)
         End If
-        'If FlgImpresion Then
-        '    FlgImpresion = 0
-        '    CortedePagina()
-        '    Print(Pxt, "-=<Fin>=-")
-        'End If
-        'If FlgExcell Then
-        '    FlgImpresion = 0
-        'End If
         If porXML = -1 Then
             ' *** fin de XML
             'Print(Pxp, TAB(1), "</archivo>")
@@ -1269,42 +1256,9 @@ Module Arinfon
             NroInstruccionesArchivadas = NroInstruccionesArchivadas + 1
             InstruccionesArchivadas(NroInstruccionesArchivadas) = RTEM 'BB
         End If
-        'FlgExcell = InStr(B, " LOTUS") 'FLAG de lotus
-        'If FlgExcell Then
-        '    B = "8Nombre de Archivo"
-        '    Pregunta()
-        '    If B = "" Then
-        '        ConfirmaImpresora()
-        '    Else
-        '        Archi$ = B
-        '    End If
-        '    DevicE = Archi$
-        '    FlgImpresion = 0
-        '    NroLinea = 0
-        '    NroPagina = 1
-        '    Y = 12
-        '    KF = 9999
-        '    FileClose(Pxt)
-        '    FileOpen(Pxt, Device, Microsoft.VisualBasic.OpenMode.Output, , OpenShare.Shared)
-        '    Exit Sub
-        'End If
-        'If FlgImpresion Then
-        '    B = "0Encabezado"
-        '    Pregunta()
-        '    If B = "" Then
+        ' Configuración de título (funcionalidad de impresión legacy removida)
         TituloInforme = BB
-        '    Else
-        '        TituloInforme = B
-        '    End If
-        '    If FechaEmision = "" Then
-        '        B = "8Fecha (dd/mm/aa)"
-        '        Pregunta()
-        '        FechaEmision = B
-        '    End If
-        '    B = "2Renglones"
-        '    Pregunta()
-            Call Impresora()
-        'End If
+        Call Impresora()
     End Sub
     Sub Delay()
         ' Delay para procesamiento
@@ -1318,50 +1272,10 @@ Module Arinfon
         If KF < 18 Then
             KF = 9999
         End If
-        'If FlgImpresion Then
-        '    DevicE = "E:\IMPRE.TXT" ' "LPT1:" ' DEVICEX$
-        'End If
-
-        Dim HuboExcept As Boolean = False
-        'FileClose(Pxt)
-        'Try
-        '    FileOpen(Pxt, Device, Microsoft.VisualBasic.OpenMode.Output, , OpenShare.Shared)
-        'Catch ex As Exception
-        '    MsgBox(ex.Message, MsgBoxStyle.OkOnly)
-        '    HuboExcept = True
-        'Finally
-        '    If HuboExcept Then
-        '        Stop
-        '    End If
-        'End Try
-        'If FlgImpresion Then
-        '    'PRINT #Pxt, LetraGrande ' letra normal
-        '    If LargoLinea > 80 Then
-        '        Debug.Print("Letra chica")
-        '        Call SiNo()
-        '        If RR Then
-        '            'PRINT #Pxt, LetraChica
-        '        End If
-        '    End If
-        'End If
 
         porXML = -1
-        ' *** inicia XML
+        ' Inicialización de XML
         If porXML = -1 Then
-            'DeviceXML = "E:\IMPRE.XML"
-            'FileClose(Pxp)
-            'Try
-            '    FileOpen(Pxp, DeviceXML, Microsoft.VisualBasic.OpenMode.Output, , OpenShare.Shared)
-            'Catch ex As Exception
-            '    MsgBox(ex.Message, MsgBoxStyle.OkOnly)
-            '    HuboExcept = True
-            'Finally
-            '    If HuboExcept Then
-            '        Stop
-            '    End If
-            'End Try
-            'Print(Pxp, TAB(1), "<?xml version=" + Chr(34) + "1.0" + Chr(34) + " encoding=" + Chr(34) + "iso-8859-1" + Chr(34) + " ?>") '"utf-8"
-            'Print(Pxp, TAB(1), "<archivo>")
             sb = New StringBuilder
             XMLHess = New XmlTextWriter(New EncodedStringWriter(sb, Encoding.UTF8))
             With XMLHess
